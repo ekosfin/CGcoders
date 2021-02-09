@@ -9,7 +9,7 @@ function App() {
 
     const [data, setData] = useState([{
         materialName: "Metalli",
-        materialData: [["A12", "A12"], [], [], ["A12"], ["A12"], []]
+        materialData: [["A12", "A11"], [], [], ["A12"], ["A12"], []]
     },
     {
         materialName: "Muovi",

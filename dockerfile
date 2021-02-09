@@ -14,4 +14,9 @@ EXPOSE 80
 
 RUN npm run build
 
+RUN rm -fr ./node_modules
+
+RUN rm -fr ./public
+RUN rm -fr ./src
+
 CMD [ "serve", "-l", "80", "build" ]

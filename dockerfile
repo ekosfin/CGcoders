@@ -10,13 +10,17 @@ RUN npm install -g serve
 
 COPY . .
 
-EXPOSE 80
-
 RUN npm run build
+
+COPY init.sh /usr/local/bin/
+	
+RUN chmod u+x /usr/local/bin/init.sh
 
 RUN rm -fr ./node_modules
 
 RUN rm -fr ./public
 RUN rm -fr ./src
 
-CMD [ "serve", "-l", "80", "build" ]
+EXPOSE 80 80
+
+ENTRYPOINT ["init.sh"]

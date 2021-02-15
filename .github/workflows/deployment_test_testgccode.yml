@@ -1,0 +1,35 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - testgccode
+
+on:
+  push:
+    branches:
+      - deployment_test
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://testgccode.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_f5aa1c4d88b1431ca08b8e3ce5286dc4 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_08f40478a6884eaebf99e517c811fd6d }}
+
+    - run: |
+        docker build . -t testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_f5aa1c4d88b1431ca08b8e3ce5286dc4 }}/gccode:${{ github.sha }}
+        docker push testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_f5aa1c4d88b1431ca08b8e3ce5286dc4 }}/gccode:${{ github.sha }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'testgccode'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_942bbf935e1e4cd7b91ccb747ab77c08 }}
+        images: 'testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_f5aa1c4d88b1431ca08b8e3ce5286dc4 }}/gccode:${{ github.sha }}'

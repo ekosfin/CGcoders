@@ -19,17 +19,17 @@ jobs:
     - uses: azure/docker-login@v1
       with:
         login-server: https://testgccode.azurecr.io/
-        username: ${{ secrets.AzureAppService_ContainerUsername_f5aa1c4d88b1431ca08b8e3ce5286dc4 }}
-        password: ${{ secrets.AzureAppService_ContainerPassword_08f40478a6884eaebf99e517c811fd6d }}
+        username: ${{ secrets.AzureAppService_ContainerUsername_e3fd8becb14e4418a5e9675a9d4aca98 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_3d041c4142bb469eb639dc56104934e9 }}
 
     - run: |
-        docker build . -t testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_f5aa1c4d88b1431ca08b8e3ce5286dc4 }}/gccode:${{ github.sha }}
-        docker push testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_f5aa1c4d88b1431ca08b8e3ce5286dc4 }}/gccode:${{ github.sha }}
+        docker build . -t testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_e3fd8becb14e4418a5e9675a9d4aca98 }}/gccode:${{ github.sha }}
+        docker push testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_e3fd8becb14e4418a5e9675a9d4aca98 }}/gccode:${{ github.sha }}
 
     - name: Deploy to Azure Web App
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'testgccode'
         slot-name: 'production'
-        publish-profile: ${{ secrets.AzureAppService_PublishProfile_942bbf935e1e4cd7b91ccb747ab77c08 }}
-        images: 'testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_f5aa1c4d88b1431ca08b8e3ce5286dc4 }}/gccode:${{ github.sha }}'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_84c9f7c5b3764a3ca7223bf60738c6fe }}
+        images: 'testgccode.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_e3fd8becb14e4418a5e9675a9d4aca98 }}/gccode:${{ github.sha }}'

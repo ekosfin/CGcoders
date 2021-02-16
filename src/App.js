@@ -9,15 +9,15 @@ function App() {
 
     const [data, setData] = useState([{
         materialName: "Metalli",
-        materialData: [["A12", "A12"], [], [], ["A12"], ["A12"], []]
-    },
-    {
-        materialName: "Muovi",
-        materialData: [[], [], ["A12", "A12"], [], ["A12"], []]
+        data: [[], [{dayItem: "A12", dayInfo: ""}], [{dayItem: "A12", dayInfo: "Tämä on lisätietoa"}, {dayItem: "A12", dayInfo: ""}], [], [{dayItem: "A12", dayInfo: "Tämä on lisätietoa"}], [{dayItem: "A12", dayInfo: "Tämä on lisätietoa"}]]
     },
     {
         materialName: "Lasi",
-        materialData: [[], ["A12"], [], ["A12", "A12"], [], ["A12"]]
+        data: [[{dayItem: "A12", dayInfo: ""}], [], [{dayItem: "A12", dayInfo: ""}], [], [{dayItem: "A12", dayInfo: ""}], []]
+    },
+    {
+        materialName: "Pahvi",
+        data: [[{dayItem: "A12", dayInfo: "Tämä on lisätietoa"}], [{dayItem: "A12", dayInfo: ""}], [], [], [{dayItem: "A12", dayInfo: ""}], [{dayItem: "A12", dayInfo: "Tämä on lisätietoa"}]]
     }])
 
     return (
@@ -52,11 +52,27 @@ function App() {
             
                 {data.map((material, index1) => (
                     <Row className="" key={index1}>
-                        <Col style={{ "padding-left": 1, "padding-right": 1}} className="grid-material" >{material.materialName}</Col>
-                        {material.materialData.map((dataItem, index2) => (
-                            <Col style={{ "padding-left": 1, "padding-right": 1}} className="grid-item-container" key={index2}>
+                        <Col style={{ "paddingLeft": 0, "paddingRight": 0}} className="grid-material" >{material.materialName}</Col>
+                        {material.data.map((dataItem, index2) => (
+                            <Col style={{ "paddingLeft": 0, "paddingRight": 0}} className="grid-item-container" key={index2}>
                                 {dataItem.map((dayData, index3) => (
-                                    <div className="grid-item" key={index3}>{dayData}</div>
+                                    <div className="grid-item" key={index3}>
+                                        {dayData.dayInfo.length > 0 ?
+                                        <div>
+                                            <div className="grid-text-bold">
+                                                {dayData.dayItem}
+                                            </div>
+                                            <div className="grid-info">
+                                                {dayData.dayInfo}
+                                            </div>
+                                        </div>
+                                        :
+                                        <div>
+                                            <div className="grid-text-normal">
+                                                {dayData.dayItem}
+                                            </div>
+                                        </div>}
+                                    </div>
                                 ))}
                             </Col>
                         ))}

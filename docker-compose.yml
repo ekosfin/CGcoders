@@ -1,0 +1,8 @@
+# docker-compose.yml
+version: "3.7"
+services:
+  react:
+    build: ./
+    hostname: react
+    ports:
+      - 80:80

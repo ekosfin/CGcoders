@@ -13,7 +13,7 @@ COPY . .
 RUN npm run build
 
 COPY init.sh /usr/local/bin/
-	
+
 RUN chmod u+x /usr/local/bin/init.sh
 
 RUN rm -fr ./node_modules

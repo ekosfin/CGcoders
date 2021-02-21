@@ -48,16 +48,27 @@ export function DataProvider({ children }) {
   ]);
   const [jwt, setJwt] = useState();
 
+  const URL = process.env.REACT_APP_GOOGLE_URL;
+
   async function getData() {
     //fecth jonka jälkeen set data
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       resolve();
     });
   }
 
   async function login(password) {
     //fetch saada jwt
-    return new Promise((resolve) => {
+    //problems with cors
+    return new Promise(async (resolve, reject) => {
+      const response = await fetch(URL + "?route=login", {
+        method: "POST",
+        mode: "cors",
+        redirect: "follow",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ watch: password }), // body data type must match "Content-Type" header
+      });
+      console.log(response);
       resolve();
     });
   }

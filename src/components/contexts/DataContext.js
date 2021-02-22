@@ -35,7 +35,7 @@ export function DataProvider({ children }) {
       ],
     },
     {
-      materialName: "Sekajäte",
+      materialName: "Seka",
       data: [
         [{ dayItem: "12A", dayInfo: "Tämä on lisätietoa", color: "#85A311" }],
         [{ dayItem: "13A", dayInfo: "", color: "#85A311" }],

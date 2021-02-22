@@ -12,21 +12,21 @@ export default function schedule() {
 
   return (
     <Container className="grid-container" fluid>
-      <Row>
-        <Col className="grid-material"></Col>
-        <Col className="grid-weekday-large">Maanantai</Col>
-        <Col className="grid-weekday-large">Tiistai</Col>
-        <Col className="grid-weekday-large">Keskiviikko</Col>
-        <Col className="grid-weekday-large">Torstai</Col>
-        <Col className="grid-weekday-large">Perjantai</Col>
-        <Col className="grid-weekday-large">Lauantai / Sunnuntai</Col>
+      <Row style={{ paddingLeft: 0, paddingRight: 0 }}>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-material"></Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Maanantai</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Tiistai</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Keskiviikko</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Torstai</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Perjantai</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Lauantai / Sunnuntai</Col>
 
-        <Col className="grid-weekday-small">Ma</Col>
-        <Col className="grid-weekday-small">Ti</Col>
-        <Col className="grid-weekday-small">Ke</Col>
-        <Col className="grid-weekday-small">To</Col>
-        <Col className="grid-weekday-small">Pe</Col>
-        <Col className="grid-weekday-small">La/ Su</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ma</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ti</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ke</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">To</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Pe</Col>
+        <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">La/ Su</Col>
       </Row>
 
       {data.map((material, index1) => (

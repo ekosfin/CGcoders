@@ -61,7 +61,8 @@
         display: none;
     }
     .grid-weekday-small {
-        height: 50px;
+        padding-bottom: 10px;
+        padding-top: 10px;
         background-color: white;
         display: flex;
         align-items: center;
@@ -77,7 +78,8 @@
         display: none;
     }
     .grid-weekday-large {
-        height: 50px;
+        padding-bottom: 10px;
+        padding-top: 10px;
         background-color: white;
         display: flex;
         align-items: center;

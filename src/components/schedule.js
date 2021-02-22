@@ -26,7 +26,7 @@ export default function schedule() {
         <Col className="grid-weekday-small">Ke</Col>
         <Col className="grid-weekday-small">To</Col>
         <Col className="grid-weekday-small">Pe</Col>
-        <Col className="grid-weekday-small">La/Su</Col>
+        <Col className="grid-weekday-small">La/ Su</Col>
       </Row>
 
       {data.map((material, index1) => (

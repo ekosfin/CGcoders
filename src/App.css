@@ -31,23 +31,11 @@
 }
 
 @media (max-width: 991px) {
-    .grid-weekday-large {
-        display: none;
-    }
-    .grid-weekday-small {
-        background-color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 17px;
-        border-bottom: 2px solid var(--border-color);
-        border-right: 2px solid var(--border-color);
-    }
     .grid-info {
         display: none;
     }
     .grid-item {
-        background-color: rgb(253, 75, 75);
+        /*background-color: rgb(253, 75, 75);*/
         border-radius: 5px;
         margin-left: 1px;
         margin-right: 1px;
@@ -56,10 +44,24 @@
 }
 
 @media (min-width: 992px) {
-    .grid-weekday-small {
+    .grid-info {
+        font-size: 12px;
+    }
+    .grid-item {
+        /*background-color: rgb(253, 75, 75);*/
+        border-radius: 5px;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-top: 3px;
+    }
+}
+
+@media (max-width: 1309px) {
+    .grid-weekday-large {
         display: none;
     }
-    .grid-weekday-large {
+    .grid-weekday-small {
+        height: 50px;
         background-color: white;
         display: flex;
         align-items: center;
@@ -68,15 +70,21 @@
         border-bottom: 2px solid var(--border-color);
         border-right: 2px solid var(--border-color);
     }
-    .grid-info {
-        font-size: 12px;
+}
+
+@media (min-width: 1310px) {
+    .grid-weekday-small {
+        display: none;
     }
-    .grid-item {
-        background-color: rgb(253, 75, 75);
-        border-radius: 5px;
-        margin-left: 5px;
-        margin-right: 5px;
-        margin-top: 3px;
+    .grid-weekday-large {
+        height: 50px;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        border-bottom: 2px solid var(--border-color);
+        border-right: 2px solid var(--border-color);
     }
 }
 
@@ -91,6 +99,7 @@
 }
 
 .grid-item-container {
+    min-height: 50px;
     background-color: white;
     display: flex;
     flex-direction: column;
@@ -102,7 +111,7 @@
 
 .grid-text-normal {
     font-size: 20px;
-    font-weight: 300;
+    font-weight: 350;
 }
 
 .grid-text-bold {

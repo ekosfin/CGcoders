@@ -19,14 +19,14 @@ export default function schedule() {
         <Col className="grid-weekday-large">Keskiviikko</Col>
         <Col className="grid-weekday-large">Torstai</Col>
         <Col className="grid-weekday-large">Perjantai</Col>
-        <Col className="grid-weekday-large">Lauantai</Col>
+        <Col className="grid-weekday-large">Lauantai / Sunnuntai</Col>
 
         <Col className="grid-weekday-small">Ma</Col>
         <Col className="grid-weekday-small">Ti</Col>
         <Col className="grid-weekday-small">Ke</Col>
         <Col className="grid-weekday-small">To</Col>
         <Col className="grid-weekday-small">Pe</Col>
-        <Col className="grid-weekday-small">La</Col>
+        <Col className="grid-weekday-small">La / Su</Col>
       </Row>
 
       {data.map((material, index1) => (
@@ -44,7 +44,7 @@ export default function schedule() {
               key={index2}
             >
               {dataItem.map((dayData, index3) => (
-                <div className="grid-item" key={index3}>
+                <div style={{ backgroundColor: dayData.color }} className="grid-item" key={index3}>
                   {dayData.dayInfo.length > 0 ? (
                     <div>
                       <div className="grid-text-bold">{dayData.dayItem}</div>

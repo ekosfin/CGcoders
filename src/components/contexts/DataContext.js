@@ -10,41 +10,66 @@ export function DataProvider({ children }) {
   //this is temp data
   const [data, setData] = useState([
     {
-      materialName: "Metalli",
+      materialName: "SRF",
       data: [
+        [{ dayItem: "12A", dayInfo: "", color: "#85A311" }],
         [],
-        [{ dayItem: "A12", dayInfo: "" }],
         [
-          { dayItem: "A12", dayInfo: "Tämä on lisätietoa" },
-          { dayItem: "A12", dayInfo: "" },
+          { dayItem: "15A", dayInfo: "Tämä on lisätietoa", color: "#CC4341" },
+          { dayItem: "18A", dayInfo: "", color: "#85A311" },
         ],
         [],
-        [{ dayItem: "A12", dayInfo: "Tämä on lisätietoa" }],
-        [{ dayItem: "A12", dayInfo: "Tämä on lisätietoa" }],
+        [{ dayItem: "13A", dayInfo: "", color: "#CC4341" }],
+        [{ dayItem: "12A", dayInfo: "", color: "#85A311" }],
       ],
     },
     {
-      materialName: "Lasi",
+      materialName: "VL",
       data: [
-        [{ dayItem: "A12", dayInfo: "" }],
         [],
-        [{ dayItem: "A12", dayInfo: "" }],
         [],
-        [{ dayItem: "A12", dayInfo: "" }],
+        [],
+        [],
+        [],
+        [],
+      ],
+    },
+    {
+      materialName: "Sekajäte",
+      data: [
+        [{ dayItem: "12A", dayInfo: "Tämä on lisätietoa", color: "#85A311" }],
+        [{ dayItem: "13A", dayInfo: "", color: "#85A311" }],
+        [],
+        [],
+        [{ dayItem: "15A", dayInfo: "", color: "#CC4341" }],
+        [{ dayItem: "18A", dayInfo: "", color: "#CC4341" }],
+      ],
+    },
+    {
+      materialName: "Metalli",
+      data: [
+        [],
+        [],
+        [{ dayItem: "12A", dayInfo: "Tämä on lisätietoa", color: "#85A311" }],
+        [],
+        [],
         [],
       ],
     },
     {
       materialName: "Pahvi",
       data: [
-        [{ dayItem: "A12", dayInfo: "Tämä on lisätietoa" }],
-        [{ dayItem: "A12", dayInfo: "" }],
         [],
         [],
-        [{ dayItem: "A12", dayInfo: "" }],
-        [{ dayItem: "A12", dayInfo: "Tämä on lisätietoa" }],
+        [{ dayItem: "12A", dayInfo: "Tämä on lisätietoa", color: "#85A311" }],
+        [],
+        [
+          { dayItem: "15A", dayInfo: "Tämä on lisätietoa", color: "#CC4341" },
+          { dayItem: "18A", dayInfo: "", color: "#85A311" },],
+        [],
       ],
     },
+
   ]);
   const [jwt, setJwt] = useState();
 

@@ -8,7 +8,7 @@ export function useData() {
 
 export function DataProvider({ children }) {
   //this is temp data
-  const [data, setData] = useState([
+  const [data, setData] = useState([/*
     {
       materialName: "SRF",
       data: [
@@ -62,7 +62,7 @@ export function DataProvider({ children }) {
         ],
         [],
       ],
-    },
+    },*/
   ]);
   const [jwtToken, setJwt] = useState();
 

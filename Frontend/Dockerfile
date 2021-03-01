@@ -8,19 +8,26 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends openssh-server \
     && echo "$SSH_PASSWD" | chpasswd 
 
-WORKDIR /app/temp
-COPY ./Frontend/package*.json ./
-RUN npm install
-COPY ./Frontend .
-RUN npm run build
-RUN mv ./build ../build
 WORKDIR /app
-RUN rm -fr ./temp
-COPY ./Backend/package*.json ./
+
+COPY package*.json ./
+
 RUN npm install
-COPY ./Backend .
+
+RUN npm install -g serve
+
+COPY . .
 COPY sshd_config /etc/ssh/
-COPY ./Backend/init.sh /usr/local/bin/
+COPY init.sh /usr/local/bin/
 RUN chmod u+x /usr/local/bin/init.sh
+
+RUN npm run build
+
+RUN rm -fr ./node_modules
+
+RUN rm -fr ./public
+RUN rm -fr ./src
+
 EXPOSE 80 80
+
 ENTRYPOINT ["init.sh"]

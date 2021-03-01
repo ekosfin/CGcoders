@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert, Container } from "react-bootstrap";
+import { Form, Button, Card, Alert, Container, Spinner } from "react-bootstrap";
 import { useData } from "./contexts/DataContext";
 import { useHistory } from "react-router-dom";
 
@@ -16,13 +16,18 @@ export default function login() {
     try {
       setError("");
       setLoading(true);
-      await login(passwordRef.current.value);
-      history.push("/home");
-    } catch {
+      let success = await login(passwordRef.current.value);
+      setLoading(false);
+      if (success) {
+        history.push("/home");
+      } else {
+        setError("Väärä salasana");
+      }
+    } catch (error) {
+      console.error(error);
       setError("Väärä salasana");
+      setLoading(false);
     }
-
-    setLoading(false);
   }
 
   return (
@@ -42,6 +47,11 @@ export default function login() {
                     <Form.Label>Päivän salasana</Form.Label>
                     <Form.Control type="password" ref={passwordRef} required />
                   </Form.Group>
+                  {loading && (
+                    <Spinner animation="border" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </Spinner>
+                  )}
                   <Button disabled={loading} className="w-100" type="submit">
                     Kirjaudu sisään
                   </Button>

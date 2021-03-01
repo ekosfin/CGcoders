@@ -25,14 +25,7 @@ export function DataProvider({ children }) {
     },
     {
       materialName: "VL",
-      data: [
-        [],
-        [],
-        [],
-        [],
-        [],
-        [],
-      ],
+      data: [[], [], [], [], [], []],
     },
     {
       materialName: "Seka",
@@ -65,37 +58,45 @@ export function DataProvider({ children }) {
         [],
         [
           { dayItem: "15A", dayInfo: "Tämä on lisätietoa", color: "#CC4341" },
-          { dayItem: "18A", dayInfo: "", color: "#85A311" },],
+          { dayItem: "18A", dayInfo: "", color: "#85A311" },
+        ],
         [],
       ],
     },
-
   ]);
-  const [jwt, setJwt] = useState();
-
-  const URL = process.env.REACT_APP_GOOGLE_URL;
+  const [jwtToken, setJwt] = useState();
 
   async function getData() {
-    //fecth jonka jälkeen set data
-    return new Promise((resolve, reject) => {
-      resolve();
+    let response = await fetch("/data", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ jwt: jwtToken }),
     });
+    let data = await response.json();
+    if (data === "Failure") {
+      console.log("it failed");
+    } else {
+      setData(data);
+    }
   }
 
   async function login(password) {
-    //fetch saada jwt
-    //problems with cors
-    return new Promise(async (resolve, reject) => {
-      const response = await fetch(URL + "?route=login", {
-        method: "POST",
-        mode: "cors",
-        redirect: "follow",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ watch: password }), // body data type must match "Content-Type" header
-      });
-      console.log(response);
-      resolve();
+    let response = await fetch("/jwt", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ pass: password }),
     });
+    let data = await response.json();
+    if (data.message === "Success!") {
+      setJwt(data.JWT);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   const value = {

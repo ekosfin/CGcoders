@@ -12,7 +12,8 @@ export default function schedule() {
       color: null
     }
   });
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
+  const [colorData, setColorData] = useState([]);
 
   //hakee datan kun siirtyy sivulle
   useEffect(() => {
@@ -21,6 +22,28 @@ export default function schedule() {
 
   useEffect(() => {
     if (data.length > 0) {
+      let list = [];
+      data.forEach(element => {
+        element.data.forEach(dataElement => {
+          dataElement.forEach(dayData => {
+            /*Make a list of all the unique names */
+            let dayDataList = dayData.dayItem.split(" ");
+            if (!list.includes(dayDataList[0])) {
+              list.push(dayDataList[0]);
+            } 
+          });
+        });
+      });
+      list.sort();
+
+      let colorList = [], colorInteger = 0;
+      /*Giving each name a color that is used for cards*/
+      list.forEach(nameData => {
+        colorList.push({ name: nameData, color: `hsl(${colorInteger}, 70%, 60%)` });
+        colorInteger += 40;
+      });
+
+      setColorData(colorList);
       setLoading(false);
     }
   }, [data]);
@@ -52,11 +75,23 @@ export default function schedule() {
     return null;
   }
 
+  const setColor = (data) => {
+    let dataList = data.dayItem.split(" ");
+    if (dataList.length > 2) {
+      let foundItem = colorData.find(item => item.name === dataList[0]);
+      //console.log(foundItem);
+      return foundItem.color;
+    }
+    console.log("Error!");
+    return null;
+    
+  }
+
   return (
     <div>
       {loading ?
       <div className="loading">
-        <Spinner animation="border" centered />
+        <Spinner animation="border" />
       </div>
       :
       <div>
@@ -112,7 +147,7 @@ export default function schedule() {
                   key={index2}
                 >
                   {dataItem.map((dayData, index3) => (
-                    <div style={{ backgroundColor: "#85A311" }} className="grid-item" onClick={() => { handleModalShow(dayData) }} key={index3}>
+                    <div style={{ backgroundColor: setColor(dayData) }} className="grid-item" onClick={() => { handleModalShow(dayData) }} key={index3}>
                       {dayData.dayInfo.length > 0 ? (
                         <div>
                           <div className="grid-text-bold">{editData(dayData)}</div>

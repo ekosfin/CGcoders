@@ -8,8 +8,7 @@ export default function schedule() {
     open: false,
     data: {
       dayItem: "",
-      dayInfo: "",
-      color: null
+      dayInfo: ""
     }
   });
   const [loading, setLoading] = useState(true);
@@ -34,8 +33,8 @@ export default function schedule() {
           });
         });
       });
+      
       list.sort();
-
       let colorList = [], colorInteger = 0;
       /*Giving each name a color that is used for cards*/
       list.forEach(nameData => {
@@ -61,8 +60,7 @@ export default function schedule() {
       open: false,
       data: {
         dayItem: "",
-        dayInfo: "",
-        color: null
+        dayInfo: ""
       }
     })
   }

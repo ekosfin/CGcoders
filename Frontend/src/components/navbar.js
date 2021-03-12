@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 
-export default function navbar() {
+export default function NavBar() {
   const history = useHistory();
 
   function handleLogout() {

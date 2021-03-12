@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-import Navbar from "./components/navbar";
+import NavBar from "./components/navbar";
 import Schedule from "./components/schedule";
 import Login from "./components/login";
 import { DataProvider } from "./components/contexts/DataContext";
@@ -15,7 +15,7 @@ export default function App() {
         <DataProvider>
           <Switch>
             <Route path="/home">
-              <Navbar />
+              <NavBar />
               <Schedule />
             </Route>
             <Route path="/">

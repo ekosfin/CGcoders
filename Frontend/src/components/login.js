@@ -3,7 +3,7 @@ import { Form, Button, Card, Alert, Container, Spinner } from "react-bootstrap";
 import { useData } from "./contexts/DataContext";
 import { useHistory } from "react-router-dom";
 
-export default function login() {
+export default function Login() {
   const passwordRef = useRef();
   const { login } = useData();
   const [error, setError] = useState("");

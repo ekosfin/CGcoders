@@ -67,18 +67,26 @@ export function DataProvider({ children }) {
   const [jwtToken, setJwt] = useState();
 
   async function getData() {
-    let response = await fetch("/data", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ jwt: jwtToken }),
-    });
-    let data = await response.json();
+    let data;
+    try {
+      let response = await fetch("/data", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ jwt: jwtToken }),
+      });
+      data = await response.json();
+    }
+    catch (error) {
+      return false;
+    }
     if (data === "Failure") {
       console.log("it failed");
+      return false;
     } else {
       setData(data);
+      return true;
     }
   }
 

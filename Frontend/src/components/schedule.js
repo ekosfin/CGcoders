@@ -12,13 +12,35 @@ export default function Schedule() {
     }
   });
   const [loading, setLoading] = useState(true);
+  const INTERVAL_TIME = 5 * 60 * 1000;
 
   //hakee datan kun siirtyy sivulle
   useEffect(() => {
-    getData();
+    const fetchData = async () => {
+      let result = await getData();
+      if (result) {
+        console.log("Success");
+      }
+      else {
+        console.log("Failed");
+      }
+    }
+
+    fetchData();
+
+
+    const timer = setInterval(() => {
+      console.log("Loading new data");
+      fetchData();
+    }, INTERVAL_TIME);
+    return () => {
+      clearInterval(timer);
+      console.log("Clearing interval");
+    };
   }, []);
 
   useEffect(() => {
+    console.log(data);
     if (data.length > 0) {
       setLoading(false);
     }
@@ -26,6 +48,7 @@ export default function Schedule() {
 
   
   const handleModalShow = (dayData) => {
+    console.log(dayData);
     setModal({
       open: true,
       data: dayData
@@ -63,14 +86,15 @@ export default function Schedule() {
             <Modal.Title>{modal.data.dayItem}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {modal.data.twoWay ? <p>Tämä kuljetus on kaksisuuntainen</p> : ""}
             {modal.data.dayInfo.length > 0 ?
-              <div>
+              <p>
                 Lisätieto: {modal.data.dayInfo}
-              </div>
+              </p>
               :
-              <div>
+              <p>
                 Tälle kuljetukselle ei ole asetettu lisätietoa
-              </div>
+              </p>
             }
 
           </Modal.Body>
@@ -113,12 +137,18 @@ export default function Schedule() {
                     <div style={{ backgroundColor: dayData.color }} className="grid-item" onClick={() => { handleModalShow(dayData) }} key={index3}>
                       {dayData.dayInfo.length > 0 ? (
                         <div>
-                          <div className="grid-text-bold">{editData(dayData)}</div>
+                          <div className="grid-text-bold">
+                            {editData(dayData)}
+                            {dayData.twoWay ? "" /*<img alt="Two way" src={twoWay} />*/ : ""}
+                          </div>
                           <div className="grid-info">{dayData.dayInfo}</div>
                         </div>
                       ) : (
                         <div>
-                          <div className="grid-text-normal">{editData(dayData)}</div>
+                          <div className="grid-text-normal">
+                            {editData(dayData)}
+                            {dayData.twoWay ? "" /*<img alt="Two way" src={twoWay} />*/ : ""}
+                          </div>
                         </div>
                       )}
                     </div>

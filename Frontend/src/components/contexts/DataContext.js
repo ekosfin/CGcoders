@@ -66,6 +66,10 @@ export function DataProvider({ children }) {
   ]);
   const [jwtToken, setJwt] = useState();
 
+  function clearData() {
+    setData([]);
+  }
+
   async function getData() {
     let data;
     try {
@@ -111,6 +115,7 @@ export function DataProvider({ children }) {
     data,
     login,
     getData,
+    clearData,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

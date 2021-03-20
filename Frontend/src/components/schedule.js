@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import { useData } from "./contexts/DataContext";
 import DeliveryModal from "./deliveryModal";
+import twoWay from "../twoWay.svg"
 
 export default function Schedule() {
   const { data, getData, clearData } = useData();
@@ -121,7 +122,7 @@ export default function Schedule() {
                           <div>
                             <div className="grid-text-bold">
                               {editData(dayData)}
-                              {dayData.twoWay ? "" /*<img alt="Two way" src={twoWay} />*/ : ""}
+                              {dayData.twoWay ? <img style={{ margin: 5 }} alt="Two way" src={twoWay} /> : ""}
                             </div>
                             <div className="grid-info">{dayData.dayInfo}</div>
                           </div>
@@ -129,7 +130,7 @@ export default function Schedule() {
                           <div>
                             <div className="grid-text-normal">
                               {editData(dayData)}
-                              {dayData.twoWay ? "" /*<img alt="Two way" src={twoWay} />*/ : ""}
+                              {dayData.twoWay ? <img style={{ margin: 5 }} alt="Two way" src={twoWay} /> : ""}
                             </div>
                           </div>
                         )}

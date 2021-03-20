@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Modal, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import { useData } from "./contexts/DataContext";
+import DeliveryModal from "./deliveryModal";
+import twoWay from "../twoWay.svg"
 
 export default function Schedule() {
-  const { data, getData } = useData();
+  const { data, getData, clearData } = useData();
+
   const [modal, setModal] = useState({
     open: false,
     data: {
@@ -12,34 +15,50 @@ export default function Schedule() {
     }
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [isCancelled, setIsCancelled] = useState(false);
+  const INTERVAL_TIME = 5 * 60 * 1000;
+
+  const fetchData = async () => {
+    let result = await getData();
+    if (isCancelled) {
+      return;
+    }
+    if (result) {
+      setError("");
+      console.log("Loaded data successfully");
+    }
+    else {
+      setError("Tietojen hakeminen epäonnistui. Yritetään uudelleen hetken kuluttua.");
+    }
+    if (loading) {
+      setLoading(false)
+    }
+  }
 
   //hakee datan kun siirtyy sivulle
   useEffect(() => {
-    getData();
+    setIsCancelled(false);
+    fetchData();
+
+    const timer = setInterval(() => {
+      console.log("Loading new data");
+      fetchData();
+    }, INTERVAL_TIME);
+
+    return () => {
+      clearInterval(timer);
+      setIsCancelled(true);
+      clearData();
+      console.log("Clearing interval");
+    };
   }, []);
 
-  useEffect(() => {
-    if (data.length > 0) {
-      setLoading(false);
-    }
-  }, [data]);
-
-  
   const handleModalShow = (dayData) => {
     setModal({
       open: true,
       data: dayData
-    })
-  }
-
-  const handleModalClose = () => {
-    setModal({
-      open: false,
-      data: {
-        dayItem: "",
-        dayInfo: ""
-      }
-    })
+    });
   }
 
   const editData = (data) => {
@@ -58,76 +77,71 @@ export default function Schedule() {
       </div>
       :
       <div>
-        <Modal show={modal.open} onHide={handleModalClose} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>{modal.data.dayItem}</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            {modal.data.dayInfo.length > 0 ?
-              <div>
-                Lisätieto: {modal.data.dayInfo}
-              </div>
-              :
-              <div>
-                Tälle kuljetukselle ei ole asetettu lisätietoa
-              </div>
-            }
+        <DeliveryModal modal={modal} setModal={setModal} />
+        
+        {error.length > 0 ? <Alert variant="warning">{error}</Alert> : ""}
 
-          </Modal.Body>
-        </Modal>
-        <Container className="grid-container" fluid>
-          <Row>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-material"></Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Maanantai</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Tiistai</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Keskiviikko</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Torstai</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Perjantai</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Lauantai</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Sunnuntai</Col>
+        {data.length > 0 ?
+          <Container className="grid-container" fluid>
+            <Row>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-material"></Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Maanantai</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Tiistai</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Keskiviikko</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Torstai</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Perjantai</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Lauantai</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-large">Sunnuntai</Col>
 
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ma</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ti</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ke</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">To</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Pe</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">La</Col>
-            <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Su</Col>
-          </Row>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ma</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ti</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Ke</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">To</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Pe</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">La</Col>
+              <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Su</Col>
+            </Row>
 
-          {data.map((material, index1) => (
-            <Row className="" key={index1}>
-              <Col
-                style={{ paddingLeft: 0, paddingRight: 0 }}
-                className="grid-material"
-              >
-                {material.materialName}
-              </Col>
-              {material.data.map((dataItem, index2) => (
+            {data.map((material, index1) => (
+              <Row className="" key={index1}>
                 <Col
                   style={{ paddingLeft: 0, paddingRight: 0 }}
-                  className="grid-item-container"
-                  key={index2}
+                  className="grid-material"
                 >
-                  {dataItem.map((dayData, index3) => (
-                    <div style={{ backgroundColor: dayData.color }} className="grid-item" onClick={() => { handleModalShow(dayData) }} key={index3}>
-                      {dayData.dayInfo.length > 0 ? (
-                        <div>
-                          <div className="grid-text-bold">{editData(dayData)}</div>
-                          <div className="grid-info">{dayData.dayInfo}</div>
-                        </div>
-                      ) : (
-                        <div>
-                          <div className="grid-text-normal">{editData(dayData)}</div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
+                  {material.materialName}
                 </Col>
-              ))}
-            </Row>
-          ))}
-        </Container>
+                {material.data.map((dataItem, index2) => (
+                  <Col
+                    style={{ paddingLeft: 0, paddingRight: 0 }}
+                    className="grid-item-container"
+                    key={index2}
+                  >
+                    {dataItem.map((dayData, index3) => (
+                      <div style={{ backgroundColor: dayData.color }} className="grid-item" onClick={() => { handleModalShow(dayData) }} key={index3}>
+                        {dayData.dayInfo.length > 0 ? (
+                          <div>
+                            <div className="grid-text-bold">
+                              {editData(dayData)}
+                              {dayData.twoWay ? <img style={{ margin: 5 }} alt="Two way" src={twoWay} /> : ""}
+                            </div>
+                            <div className="grid-info">{dayData.dayInfo}</div>
+                          </div>
+                        ) : (
+                          <div>
+                            <div className="grid-text-normal">
+                              {editData(dayData)}
+                              {dayData.twoWay ? <img style={{ margin: 5 }} alt="Two way" src={twoWay} /> : ""}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </Col>
+                ))}
+              </Row>
+            ))}
+          </Container>
+          : "" }
       </div>
       }
     </div>

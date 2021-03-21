@@ -1,0 +1,51 @@
+#GCP app engine build and deploy
+name: Build and deploy app to GCP app engine
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install frontend dependencies
+        working-directory: ./Frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: ./Frontend
+        run: npm run build
+        env:
+          CI: ""
+
+      - name: Copy frontend to backend
+        run: cp -r ./Frontend/build ./Backend/build
+
+      - name: Upload static build
+        uses: google-github-actions/upload-cloud-storage@main
+        with:
+          credentials: ${{ secrets.GCP_Creds }}
+          path: ./Frontend/build
+          destination: gccoders.appspot.com
+
+      - name: Find and replace URL secrets
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "REPLACE_URL"
+          replace: ${{ secrets.URL }}
+          include: app.yaml
+
+      - name: Deploy to google app engine
+        uses: google-github-actions/deploy-appengine@main
+        with:
+          credentials: ${{ secrets.GCP_Creds }}
+          working_directory: ./Backend

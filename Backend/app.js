@@ -31,5 +31,9 @@ app.use(function (err, req, res, next) {
   res.status(500).send("Something bad happened!");
 });
 
-app.listen(process.env.PORT);
-console.log("Running backend on port: " + process.env.PORT);
+const server = app.listen(process.env.PORT || 80, () => {
+  const host = server.address().address;
+  const port = server.address().port;
+
+  console.log(`App listening at ${host}:${port}`);
+});

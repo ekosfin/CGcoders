@@ -2,10 +2,3 @@ runtime: nodejs14
 
 env_variables:
   URL: "REPLACE_URL"
-
-handlers:
-  - url: /build**
-    static_dir: build
-
-  - url: /.*
-    script: auto

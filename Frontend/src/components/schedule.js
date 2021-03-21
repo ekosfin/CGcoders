@@ -9,10 +9,7 @@ export default function Schedule() {
 
   const [modal, setModal] = useState({
     open: false,
-    data: {
-      dayItem: "",
-      dayInfo: ""
-    }
+    data: null
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -54,9 +51,10 @@ export default function Schedule() {
     };
   }, []);
 
-  const handleModalShow = (dayData) => {
+  //Handles delivery modal open / close
+  const handleDeliveryModal = (dayData, openState) => {
     setModal({
-      open: true,
+      open: openState,
       data: dayData
     });
   }
@@ -77,7 +75,7 @@ export default function Schedule() {
       </div>
       :
       <div>
-        <DeliveryModal modal={modal} setModal={setModal} />
+        <DeliveryModal modal={modal} handleDeliveryModal={handleDeliveryModal} />
         
         {error.length > 0 ? <Alert variant="warning">{error}</Alert> : ""}
 
@@ -117,7 +115,7 @@ export default function Schedule() {
                     key={index2}
                   >
                     {dataItem.map((dayData, index3) => (
-                      <div style={{ backgroundColor: dayData.color }} className="grid-item" onClick={() => { handleModalShow(dayData) }} key={index3}>
+                      <div style={{ backgroundColor: dayData.color }} className="grid-item" onClick={() => { handleDeliveryModal(dayData, true) }} key={index3}>
                         {dayData.dayInfo.length > 0 ? (
                           <div>
                             <div className="grid-text-bold">

@@ -8,7 +8,7 @@ handlers:
     static_dir: build
 
   - url: /build/static
-  static_dir: build/static
+    static_dir: build/static
 
   - url: /.*
     script: auto

@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import { useData } from "./contexts/DataContext";
 import DeliveryModal from "./deliveryModal";
+import AdminModal from "./adminModal";
 import twoWay from "../twoWay.svg"
 
 export default function Schedule() {
-  const { data, getData, clearData } = useData();
+  const { data, getData, clearData, userRights } = useData();
 
-  const [modal, setModal] = useState({
+  const [deliveryModal, setDeliveryModal] = useState({
     open: false,
     data: null
   });
+
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isCancelled, setIsCancelled] = useState(false);
@@ -33,7 +36,7 @@ export default function Schedule() {
     }
   }
 
-  //hakee datan kun siirtyy sivulle
+  //Fetches data on first load and sets an INTERVAL_TIME minute timer to reload data
   useEffect(() => {
     setIsCancelled(false);
     fetchData();
@@ -43,6 +46,7 @@ export default function Schedule() {
       fetchData();
     }, INTERVAL_TIME);
 
+    //Handle logout, clearing data
     return () => {
       clearInterval(timer);
       setIsCancelled(true);
@@ -53,7 +57,7 @@ export default function Schedule() {
 
   //Handles delivery modal open / close
   const handleDeliveryModal = (dayData, openState) => {
-    setModal({
+    setDeliveryModal({
       open: openState,
       data: dayData
     });
@@ -67,6 +71,8 @@ export default function Schedule() {
     return null;
   }
 
+
+
   return (
     <div>
       {loading ?
@@ -75,11 +81,12 @@ export default function Schedule() {
       </div>
       :
       <div>
-        <DeliveryModal modal={modal} handleDeliveryModal={handleDeliveryModal} />
+        <DeliveryModal deliveryModal={deliveryModal} handleDeliveryModal={handleDeliveryModal} />
+        {userRights === "admin" && <AdminModal />}
         
-        {error.length > 0 ? <Alert variant="warning">{error}</Alert> : ""}
+        {error.length > 0 && <Alert variant="warning">{error}</Alert>}
 
-        {data.length > 0 ?
+        {data.length > 0 &&
           <Container className="grid-container" fluid>
             <Row>
               <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-material"></Col>
@@ -120,7 +127,7 @@ export default function Schedule() {
                           <div>
                             <div className="grid-text-bold">
                               {editData(dayData)}
-                              {dayData.twoWay ? <img style={{ margin: 5 }} alt="Two way" src={twoWay} /> : ""}
+                              {dayData.twoWay && <img style={{ margin: 5 }} alt="Two way" src={twoWay} />}
                             </div>
                             <div className="grid-info">{dayData.dayInfo}</div>
                           </div>
@@ -128,7 +135,7 @@ export default function Schedule() {
                           <div>
                             <div className="grid-text-normal">
                               {editData(dayData)}
-                              {dayData.twoWay ? <img style={{ margin: 5 }} alt="Two way" src={twoWay} /> : ""}
+                              {dayData.twoWay && <img style={{ margin: 5 }} alt="Two way" src={twoWay} />}
                             </div>
                           </div>
                         )}
@@ -138,8 +145,7 @@ export default function Schedule() {
                 ))}
               </Row>
             ))}
-          </Container>
-          : "" }
+          </Container>}
       </div>
       }
     </div>

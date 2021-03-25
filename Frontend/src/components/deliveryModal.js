@@ -6,16 +6,16 @@ function DeliveryModal(props) {
 
 
   return (
-    props.modal.data !== null ?
-      <Modal show={props.modal.open} onHide={() => props.handleDeliveryModal(null, false)} centered>
+    props.deliveryModal.data !== null ? (
+      <Modal show={props.deliveryModal.open} onHide={() => props.handleDeliveryModal(null, false)} centered>
         <Modal.Header closeButton>
-          <Modal.Title>{props.modal.data.dayItem}</Modal.Title>
+          <Modal.Title>{props.deliveryModal.data.dayItem}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {props.modal.data.twoWay ? <p>Tämä kuljetus on kaksisuuntainen</p> : ""}
-          {props.modal.data.dayInfo.length > 0 ?
+          {props.deliveryModal.data.twoWay ? <p>Tämä kuljetus on kaksisuuntainen</p> : ""}
+          {props.deliveryModal.data.dayInfo.length > 0 ?
             <p>
-              Lisätieto: {props.modal.data.dayInfo}
+              Lisätieto: {props.deliveryModal.data.dayInfo}
             </p>
             :
             <p>
@@ -24,7 +24,7 @@ function DeliveryModal(props) {
           }
         </Modal.Body>
       </Modal>
-    : ""
+    ) : ""
   );
 }
 

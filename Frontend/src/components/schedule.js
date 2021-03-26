@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Spinner, Alert } from "react-bootstrap";
 import { useData } from "./contexts/DataContext";
+import { useAdminData } from "./contexts/AdminDataContext";
 import DeliveryModal from "./deliveryModal";
 import AdminModal from "./adminModal";
 import twoWay from "../twoWay.svg"
 
 export default function Schedule() {
   const { data, getData, clearData, userRights } = useData();
+  const { setAdminData } = useAdminData();
 
   const [deliveryModal, setDeliveryModal] = useState({
     open: false,
@@ -55,6 +57,13 @@ export default function Schedule() {
     };
   }, []);
 
+  useEffect(() => {
+    if (data.schedule !== undefined && data.schedule.length > 0 && userRights === "admin") {
+      setAdminData(data);
+    }
+    }, [data]);
+
+
   //Handles delivery modal open / close
   const handleDeliveryModal = (dayData, openState) => {
     setDeliveryModal({
@@ -86,7 +95,7 @@ export default function Schedule() {
         
         {error.length > 0 && <Alert variant="warning">{error}</Alert>}
 
-        {data.length > 0 &&
+        {data.schedule !== undefined &&  data.schedule.length > 0 ?
           <Container className="grid-container" fluid>
             <Row>
               <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-material"></Col>
@@ -107,7 +116,7 @@ export default function Schedule() {
               <Col style={{ paddingLeft: 0, paddingRight: 0 }} className="grid-weekday-small">Su</Col>
             </Row>
 
-            {data.map((material, index1) => (
+            {data.schedule.map((material, index1) => (
               <Row className="" key={index1}>
                 <Col
                   style={{ paddingLeft: 0, paddingRight: 0 }}
@@ -145,7 +154,8 @@ export default function Schedule() {
                 ))}
               </Row>
             ))}
-          </Container>}
+          </Container>
+          : ""}
       </div>
       }
     </div>

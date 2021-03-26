@@ -14,12 +14,14 @@ export function DataProvider({ children }) {
 
   function clearData() {
     setData([]);
+    setJwt();
+    setUserRights(null);
   }
 
   async function getData() {
     let data;
     try {
-      let response = await fetch("/data", {
+      let response = await fetch("http://localhost:8080/data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -31,17 +33,17 @@ export function DataProvider({ children }) {
     catch (error) {
       return false;
     }
-    if (data === "Failure") {
-      console.log("it failed");
+    if (!data) {
       return false;
-    } else {
+    }
+    else {
       setData(data);
       return true;
     }
   }
 
   async function login(password) {
-    let response = await fetch("/jwt", {
+    let response = await fetch("http://localhost:8080/jwt", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -52,7 +54,8 @@ export function DataProvider({ children }) {
     if (data.message === "Success!") {
       setJwt(data.JWT);
       return true;
-    } else {
+    }
+    else {
       return false;
     }
   }

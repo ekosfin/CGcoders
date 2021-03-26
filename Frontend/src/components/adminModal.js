@@ -3,8 +3,8 @@ import { Col, Form, Modal, Row, Button } from "react-bootstrap";
 import { useAdminData } from "./contexts/AdminDataContext";
 
 function AdminModal() {
-  const { adminModal, handleAdminModal } = useAdminData();
-  const [selectData, setSelectData] = useState({
+  const { adminModal, handleAdminModal, selectData } = useAdminData();
+  /*const [selectData, setSelectData] = useState({
     material: [
       "Pahvi",
       "Metalli",
@@ -34,25 +34,29 @@ function AdminModal() {
       "Meno",
       "Meno-paluu"
     ]
-  });
+  });*/
   const [data, setData] = useState({
-
+    material: "",
+    day: "",
+    driver: "",
+    destination: "",
+    time: "",
+    direction: "",
+    info: ""
   });
-
-
-  const fetchData = async () => {
-    /*TODO: Fetch data for form from API */
-    console.log("Fething data for admin modal");
-  }
 
   useEffect(() => {
-    if (adminModal.open) {
-      fetchData()
-    }
-
     if (!adminModal.open) {
       console.log("Clearing admin modal state");
-      setData({});
+      setData({
+        material: "",
+        day: "",
+        driver: "",
+        destination: "",
+        time: "",
+        direction: "",
+        info: ""
+      });
     }
   }, [adminModal.open])
 

@@ -26,13 +26,13 @@ export default function NavBar() {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="navbar-button-container">
           {userRights === "admin" ?
-            <Button style={{ margin: 5}} variant="outline-light" onClick={() => handleAdminModal(true, "new")}>
+            <Button style={{ margin: 5 }} variant="outline-light" onClick={() => handleAdminModal(true, "new")}>
               Uusi toimitus
-          </Button>
+            </Button>
             : ""}
-          <Button style={{ margin: 5}} variant="outline-light" onClick={handleLogout}>
+          <Button style={{ margin: 5 }} variant="outline-light" onClick={handleLogout}>
             Kirjaudu ulos
-          </Button>
+            </Button>
         </Nav>
       </Navbar.Collapse>
     </Navbar>

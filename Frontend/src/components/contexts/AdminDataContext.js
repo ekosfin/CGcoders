@@ -13,35 +13,22 @@ export function AdminDataProvider({ children }) {
     open: false,
     mode: null
   });
-  const [selectData, setSelectData] = useState([]);
+
 
   const handleAdminModal = (openState, mode) => {
-    if (userRights === "admin") {
-      setAdminModal({
-        open: openState,
-        mode: mode
-      });
+    if (userRights !== "admin") {
+      console.log("No admin rights!");
+      return;
     }
-  }
-
-  const setAdminData = (data) => {
-    let adminModalDataList = [], materialList = [];
-    data.schedule.forEach(element => {
-      materialList.push(element.materialName);
+    setAdminModal({
+      open: openState,
+      mode: mode
     });
-    adminModalDataList.material = materialList;
-    adminModalDataList.destination = data.destinations;
-    adminModalDataList.driver = data.drivers;
-    adminModalDataList.day = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"];
-    adminModalDataList.direction = ["Meno", "Meno-paluu"];
-    setSelectData(adminModalDataList);
   }
 
   const value = {
     adminModal,
     handleAdminModal,
-    setAdminData,
-    selectData
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>

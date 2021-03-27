@@ -18,10 +18,27 @@ export function DataProvider({ children }) {
     setUserRights(null);
   }
 
+  const modifyData = (data) => {
+    let dayList = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"];
+    if (data.schedule !== undefined && data.schedule.length > 0) {
+      data.schedule.forEach(material => {
+        let dayNum = 0;
+        material.data.forEach(dayItem => {
+          dayItem.forEach(deliveryItem => {
+            deliveryItem.day = dayList[dayNum];
+            deliveryItem.material = material.materialName;
+          });
+          dayNum++; 
+        });
+      });
+    }
+    return data;
+  }
+
   async function getData() {
     let data;
     try {
-      let response = await fetch("http://localhost:8080/data", {
+      let response = await fetch("/data", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -37,13 +54,14 @@ export function DataProvider({ children }) {
       return false;
     }
     else {
+      data = modifyData(data);
       setData(data);
       return true;
     }
   }
 
   async function login(password) {
-    let response = await fetch("http://localhost:8080/jwt", {
+    let response = await fetch("/jwt", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

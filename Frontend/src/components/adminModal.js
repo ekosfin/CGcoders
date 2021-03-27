@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Col, Form, Modal, Row, Button } from "react-bootstrap";
 import { useAdminData } from "./contexts/AdminDataContext";
 
-function AdminModal() {
-  const { adminModal, handleAdminModal, selectData } = useAdminData();
+function AdminModal(props) {
+  const { adminModal, handleAdminModal } = useAdminData();
   /*const [selectData, setSelectData] = useState({
     material: [
       "Pahvi",
@@ -35,20 +35,12 @@ function AdminModal() {
       "Meno-paluu"
     ]
   });*/
-  const [data, setData] = useState({
-    material: "",
-    day: "",
-    driver: "",
-    destination: "",
-    time: "",
-    direction: "",
-    info: ""
-  });
+  
 
   useEffect(() => {
     if (!adminModal.open) {
       console.log("Clearing admin modal state");
-      setData({
+      props.setAdminModalDefaultData({
         material: "",
         day: "",
         driver: "",
@@ -61,12 +53,12 @@ function AdminModal() {
   }, [adminModal.open])
 
   const handleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    props.setAdminModalDefaultData({ ...props.adminModalDefaultData, [e.target.name]: e.target.value });
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
+    console.log(props.adminModalDefaultData);
   }
 
 
@@ -90,12 +82,12 @@ function AdminModal() {
               <Form.Control
                 as="select"
                 name="material"
-                value={data.material}
+                value={props.adminModalDefaultData.material}
                 onChange={handleChange}
                 required>
                 <option hidden></option>
-                {selectData.material !== undefined &&
-                  selectData.material.map((materialData, index) => (
+                {props.selectData.material !== undefined &&
+                  props.selectData.material.map((materialData, index) => (
                     <option key={index} value={materialData}>{materialData}</option>
                   ))
                 }
@@ -112,12 +104,12 @@ function AdminModal() {
               <Form.Control
                 as="select"
                 name="day"
-                value={data.day}
+                value={props.adminModalDefaultData.day}
                 onChange={handleChange}
                 required>
                 <option hidden></option>
-                {selectData.day !== undefined &&
-                  selectData.day.map((dayData, index) => (
+                {props.selectData.day !== undefined &&
+                  props.selectData.day.map((dayData, index) => (
                     <option key={index} value={dayData}>{dayData}</option>
                   ))
                 }
@@ -139,12 +131,12 @@ function AdminModal() {
               <Form.Control
                 as="select"
                 name="driver"
-                value={data.driver}
+                value={props.adminModalDefaultData.driver}
                 onChange={handleChange}
                 required>
                 <option hidden></option>
-                {selectData.driver !== undefined &&
-                  selectData.driver.map((driverData, index) => (
+                {props.selectData.driver !== undefined &&
+                  props.selectData.driver.map((driverData, index) => (
                     <option key={index} value={driverData}>{driverData}</option>
                   ))
                 }
@@ -161,12 +153,12 @@ function AdminModal() {
               <Form.Control
                 as="select"
                 name="destination"
-                value={data.destination}
+                value={props.adminModalDefaultData.destination}
                 onChange={handleChange}
                 required>
                 <option hidden></option>
-                {selectData.destination !== undefined &&
-                  selectData.destination.map((destinationData, index) => (
+                {props.selectData.destination !== undefined &&
+                  props.selectData.destination.map((destinationData, index) => (
                     <option key={index} value={destinationData}>{destinationData}</option>
                   ))
                 }
@@ -182,7 +174,7 @@ function AdminModal() {
             <Col sm={9}>
               <Form.Control
                 name="time"
-                value={data.time}
+                value={props.adminModalDefaultData.time}
                 onChange={handleChange}
                 required>
               </Form.Control>
@@ -198,12 +190,12 @@ function AdminModal() {
               <Form.Control
                 as="select"
                 name="direction"
-                value={data.direction}
+                value={props.adminModalDefaultData.direction}
                 onChange={handleChange}
                 required>
                 <option hidden></option>
-                {selectData.direction !== undefined &&
-                  selectData.direction.map((directionData, index) => (
+                {props.selectData.direction !== undefined &&
+                  props.selectData.direction.map((directionData, index) => (
                     <option key={index} value={directionData}>{directionData}</option>
                   ))
                 }
@@ -219,12 +211,15 @@ function AdminModal() {
             <Col sm={9}>
               <Form.Control
                 name="info"
-                value={data.info}
+                value={props.adminModalDefaultData.info}
                 onChange={handleChange}>
               </Form.Control>
             </Col>
           </Row>
+          {adminModal.mode === "new" ?
           <Button className="w-100" type="submit">Lisää toimitus</Button>
+          :
+          <Button className="w-100" type="submit">Tallenna muutokset</Button>}
         </Form>
       </Modal.Body>
     </Modal>

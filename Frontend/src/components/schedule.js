@@ -12,14 +12,15 @@ export default function Schedule() {
     open: false,
     data: null
   });
-  const [adminModalDefaultData, setAdminModalDefaultData] = useState({
+  const [adminModalData, setAdminModalData] = useState({
     material: "",
     day: "",
     driver: "",
     destination: "",
     time: "",
     direction: "",
-    info: ""
+    info: "",
+    idNum: null
   });
   const [selectData, setSelectData] = useState([]);
 
@@ -29,14 +30,17 @@ export default function Schedule() {
   const [isCancelled, setIsCancelled] = useState(false);
   const INTERVAL_TIME = 5 * 60 * 1000;
 
-  const setAdminModalData = (data) => {
-    let adminModalDataList = [], materialList = [];
+  const setAdminModalSelectData = (data) => {
+    let adminModalDataList = [], materialList = [], driverList = [];
     data.schedule.forEach(element => {
       materialList.push(element.materialName);
     });
+    data.drivers.forEach(element => {
+      driverList.push(element.driver);
+    });
     adminModalDataList.material = materialList;
     adminModalDataList.destination = data.destinations;
-    adminModalDataList.driver = data.drivers;
+    adminModalDataList.driver = driverList;
     adminModalDataList.day = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"];
     adminModalDataList.direction = ["Meno", "Meno-paluu"];
     setSelectData(adminModalDataList);
@@ -79,7 +83,7 @@ export default function Schedule() {
 
   useEffect(() => {
     if (data.schedule !== undefined && data.schedule.length > 0 && userRights === "admin") {
-      setAdminModalData(data);
+      setAdminModalSelectData(data);
     }
   }, [data]);
 
@@ -110,9 +114,9 @@ export default function Schedule() {
         </div>
         :
         <div>
-          <DeliveryModal deliveryModal={deliveryModal} handleDeliveryModal={handleDeliveryModal} setAdminModalDefaultData={setAdminModalDefaultData}/>
+          <DeliveryModal deliveryModal={deliveryModal} handleDeliveryModal={handleDeliveryModal} setAdminModalData={setAdminModalData}/>
           {userRights === "admin" &&
-            <AdminModal selectData={selectData} adminModalDefaultData={adminModalDefaultData} setAdminModalDefaultData={setAdminModalDefaultData}/>
+            <AdminModal selectData={selectData} adminModalData={adminModalData} setAdminModalData={setAdminModalData}/>
           }
 
           {error.length > 0 && <Alert variant="warning">{error}</Alert>}

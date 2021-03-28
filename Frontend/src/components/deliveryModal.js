@@ -10,14 +10,15 @@ function DeliveryModal(props) {
   const handleEditDelivery = () => {
     let twoWay = props.deliveryModal.data.twoWay ? "Meno-paluu" : "Meno";
     props.handleDeliveryModal(null, false);
-    props.setAdminModalDefaultData({
+    props.setAdminModalData({
       material: props.deliveryModal.data.material,
       day: props.deliveryModal.data.day,
       driver: props.deliveryModal.data.dayItem.split(" ")[0],
       destination: props.deliveryModal.data.dayItem.split(" ")[1],
       time: props.deliveryModal.data.dayItem.split(" ")[2],
       direction: twoWay,
-      info: props.deliveryModal.data.dayInfo
+      info: props.deliveryModal.data.dayInfo,
+      idNum: props.deliveryModal.data.idNum
     });
     handleAdminModal(true, "edit");
   }

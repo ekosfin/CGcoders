@@ -10,7 +10,8 @@ export function DataProvider({ children }) {
   //this is temp data
   const [data, setData] = useState([]);
   const [jwtToken, setJwt] = useState();
-  const [userRights, setUserRights] = useState(null);
+  const [userRights, setUserRights] = useState("admin");
+  const [idNum, setIdNum] = useState();
 
   function clearData() {
     setData([]);
@@ -21,16 +22,20 @@ export function DataProvider({ children }) {
   const modifyData = (data) => {
     let dayList = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"];
     if (data.schedule !== undefined && data.schedule.length > 0) {
+      let idNum = 0;
       data.schedule.forEach(material => {
         let dayNum = 0;
         material.data.forEach(dayItem => {
           dayItem.forEach(deliveryItem => {
             deliveryItem.day = dayList[dayNum];
             deliveryItem.material = material.materialName;
+            deliveryItem.idNum = idNum;
+            idNum++;
           });
-          dayNum++; 
+          dayNum++;
         });
       });
+      setIdNum(idNum);
     }
     return data;
   }
@@ -80,10 +85,13 @@ export function DataProvider({ children }) {
 
   const value = {
     data,
-    login,
+    setData,
     getData,
     clearData,
+    login,
     userRights,
+    idNum,
+    setIdNum
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

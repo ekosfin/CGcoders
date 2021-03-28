@@ -1,46 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Form, Modal, Row, Button } from "react-bootstrap";
 import { useAdminData } from "./contexts/AdminDataContext";
+import { useData } from "./contexts/DataContext";
 
 function AdminModal(props) {
   const { adminModal, handleAdminModal } = useAdminData();
-  /*const [selectData, setSelectData] = useState({
-    material: [
-      "Pahvi",
-      "Metalli",
-      "Muovi"
-    ],
-    day: [
-      "Maanantai",
-      "Tiistai",
-      "Keskiviikko",
-      "Torstai",
-      "Perjantai",
-      "Lauantai",
-      "Sunnuntai"
-    ],
-    driver: [
-      "Pekka",
-      "Mikko",
-      "Kalle",
-      "Esko"
-    ],
-    destination: [
-      "Lappeenranta",
-      "Kouvola",
-      "Tampere"
-    ],
-    direction: [
-      "Meno",
-      "Meno-paluu"
-    ]
-  });*/
-  
+  const { data, setData, idNum, setIdNum } = useData();
+  const [adminModalOriginalData, setAdminModalOriginalData] = useState({
+    material: "",
+    day: ""
+  })
+
 
   useEffect(() => {
+    if (adminModal.open) {
+      setAdminModalOriginalData({
+        material: props.adminModalData.material,
+        day: props.adminModalData.day
+      });
+    }
     if (!adminModal.open) {
       console.log("Clearing admin modal state");
-      props.setAdminModalDefaultData({
+      props.setAdminModalData({
         material: "",
         day: "",
         driver: "",
@@ -53,12 +34,111 @@ function AdminModal(props) {
   }, [adminModal.open])
 
   const handleChange = (e) => {
-    props.setAdminModalDefaultData({ ...props.adminModalDefaultData, [e.target.name]: e.target.value });
+    props.setAdminModalData({ ...props.adminModalData, [e.target.name]: e.target.value });
+  }
+
+  const addToEdits = (edits, add) => {
+    if (add !== undefined) {
+      edits.push(add);
+    }
+    return edits;
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(props.adminModalDefaultData);
+    let result, edits = [];
+    if (adminModal.mode === "new") {
+      result = addDelivery(data, idNum);
+      edits = addToEdits(edits, result.edits);
+    }
+    else if (adminModal.mode === "edit") {
+      result = removeDelivery(data);
+      edits = addToEdits(edits, result.edits);
+
+      result = addDelivery(result.dataList, props.adminModalData.idNum);
+      edits = addToEdits(edits, result.edits);
+    }
+    else if (adminModal.mode === "delete") {
+      /*TODO */
+      result = removeDelivery(data);
+      edits = addToEdits(edits, result.edits);
+    }
+    //console.log(dataList);
+    setData(result.dataList);
+    handleAdminModal(false, null);
+  }
+
+
+  const addDelivery = (dataList, idNumArg) => {
+    let dayList = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"];
+    let twoWay = props.adminModalData.direction === "Meno-paluu" ? true : false;
+    let driverColor = "#FFFFFF";
+
+    data.drivers.forEach(element => {
+      if (props.adminModalData.driver === element.driver) {
+        driverColor = element.color;
+      }
+    });
+
+    let deliveryData = {
+      color: driverColor,
+      day: props.adminModalData.day,
+      dayInfo: props.adminModalData.info,
+      dayItem: props.adminModalData.driver + " " + props.adminModalData.destination + " " + props.adminModalData.time,
+      idNum: idNumArg,
+      material: props.adminModalData.material,
+      twoWay: twoWay
+    }
+    let edits = "";
+    setIdNum(idNum + 1);
+    if (dataList.schedule !== undefined && data.schedule.length > 0) {
+      dataList.schedule = dataList.schedule.map(material => {
+        if (material.materialName === props.adminModalData.material) {
+          let dayNum = 0;
+          material.data = material.data.map(dayItem => {
+            if (dayNum === dayList.findIndex(day => day === props.adminModalData.day)) {
+              dayItem.push(deliveryData)
+              edits = {
+                materialName: props.adminModalData.material,
+                day: props.adminModalData.day,
+                data: dayItem
+              }
+              /*TODO: Send dayItem list to sheets */
+            }
+            dayNum++;
+            return dayItem;
+          });
+        }
+        return material;
+      });
+    }
+    return { dataList: dataList, edits: edits };
+  }
+
+  const removeDelivery = (dataList) => {
+    let edits;
+    if (dataList.schedule !== undefined && data.schedule.length > 0) {
+      dataList.schedule = dataList.schedule.map(material => {
+        material.data = material.data.map(dayItem => {
+          let removed = false;
+          dayItem = dayItem.filter(deliveryItem => {
+            if (deliveryItem.idNum === props.adminModalData.idNum) { removed = true; }
+            return deliveryItem.idNum !== props.adminModalData.idNum;
+          });
+
+          if (removed) {
+            edits = {
+              materialName: adminModalOriginalData.material,
+              day: adminModalOriginalData.day,
+              data: dayItem
+            }
+          }
+          return dayItem;
+        });
+        return material;
+      });
+    }
+    return { dataList: dataList, edits: edits };
   }
 
 
@@ -69,158 +149,168 @@ function AdminModal(props) {
           <Modal.Title>Uuden toimituksen luominen</Modal.Title>
         ) : adminModal.mode === "edit" ? (
           <Modal.Title>Toimituksen muokkaaminen</Modal.Title>
+        ) : adminModal.mode === "delete" ? (
+          <Modal.Title>Toimituksen poistaminen</Modal.Title>
         ) : ""}
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit} >
-          {/*Material*/}
-          <Row style={{ marginBottom: 10 }}>
-            <Col sm={3}>
-              <p className="admin-form-text">Materiaali</p>
-            </Col>
-            <Col sm={9}>
-              <Form.Control
-                as="select"
-                name="material"
-                value={props.adminModalDefaultData.material}
-                onChange={handleChange}
-                required>
-                <option hidden></option>
-                {props.selectData.material !== undefined &&
-                  props.selectData.material.map((materialData, index) => (
-                    <option key={index} value={materialData}>{materialData}</option>
-                  ))
-                }
-              </Form.Control>
-            </Col>
-          </Row>
+        {adminModal.mode === "new" || adminModal.mode === "edit" ?
+          <div>
+            <Form onSubmit={handleSubmit} >
+              {/*Material*/}
+              <Row style={{ marginBottom: 10 }}>
+                <Col sm={3}>
+                  <p className="admin-form-text">Materiaali</p>
+                </Col>
+                <Col sm={9}>
+                  <Form.Control
+                    as="select"
+                    name="material"
+                    value={props.adminModalData.material}
+                    onChange={handleChange}
+                    required>
+                    <option hidden></option>
+                    {props.selectData.material !== undefined &&
+                      props.selectData.material.map((materialData, index) => (
+                        <option key={index} value={materialData}>{materialData}</option>
+                      ))
+                    }
+                  </Form.Control>
+                </Col>
+              </Row>
 
-          {/*Day*/}
-          <Row>
-            <Col sm={3}>
-              <p className="admin-form-text">Viikonpäivä</p>
-            </Col>
-            <Col sm={9}>
-              <Form.Control
-                as="select"
-                name="day"
-                value={props.adminModalDefaultData.day}
-                onChange={handleChange}
-                required>
-                <option hidden></option>
-                {props.selectData.day !== undefined &&
-                  props.selectData.day.map((dayData, index) => (
-                    <option key={index} value={dayData}>{dayData}</option>
-                  ))
-                }
-              </Form.Control>
-            </Col>
-          </Row>
-          <Row style={{ marginBottom: 8 }}>
-            <Col style={{ padding: 0 }}>
-              <hr />
-            </Col>
-          </Row>
+              {/*Day*/}
+              <Row>
+                <Col sm={3}>
+                  <p className="admin-form-text">Viikonpäivä</p>
+                </Col>
+                <Col sm={9}>
+                  <Form.Control
+                    as="select"
+                    name="day"
+                    value={props.adminModalData.day}
+                    onChange={handleChange}
+                    required>
+                    <option hidden></option>
+                    {props.selectData.day !== undefined &&
+                      props.selectData.day.map((dayData, index) => (
+                        <option key={index} value={dayData}>{dayData}</option>
+                      ))
+                    }
+                  </Form.Control>
+                </Col>
+              </Row>
+              <Row style={{ marginBottom: 8 }}>
+                <Col style={{ padding: 0 }}>
+                  <hr />
+                </Col>
+              </Row>
 
-          {/*Driver*/}
-          <Row style={{ marginBottom: 10 }}>
-            <Col sm={3}>
-              <p className="admin-form-text">Kuljettaja</p>
-            </Col>
-            <Col sm={9}>
-              <Form.Control
-                as="select"
-                name="driver"
-                value={props.adminModalDefaultData.driver}
-                onChange={handleChange}
-                required>
-                <option hidden></option>
-                {props.selectData.driver !== undefined &&
-                  props.selectData.driver.map((driverData, index) => (
-                    <option key={index} value={driverData}>{driverData}</option>
-                  ))
-                }
-              </Form.Control>
-            </Col>
-          </Row>
+              {/*Driver*/}
+              <Row style={{ marginBottom: 10 }}>
+                <Col sm={3}>
+                  <p className="admin-form-text">Kuljettaja</p>
+                </Col>
+                <Col sm={9}>
+                  <Form.Control
+                    as="select"
+                    name="driver"
+                    value={props.adminModalData.driver}
+                    onChange={handleChange}
+                    required>
+                    <option hidden></option>
+                    {props.selectData.driver !== undefined &&
+                      props.selectData.driver.map((driverData, index) => (
+                        <option key={index} value={driverData}>{driverData}</option>
+                      ))
+                    }
+                  </Form.Control>
+                </Col>
+              </Row>
 
-          {/*Destination*/}
-          <Row style={{ marginBottom: 10 }}>
-            <Col sm={3}>
-              <p className="admin-form-text">Kohde</p>
-            </Col>
-            <Col sm={9}>
-              <Form.Control
-                as="select"
-                name="destination"
-                value={props.adminModalDefaultData.destination}
-                onChange={handleChange}
-                required>
-                <option hidden></option>
-                {props.selectData.destination !== undefined &&
-                  props.selectData.destination.map((destinationData, index) => (
-                    <option key={index} value={destinationData}>{destinationData}</option>
-                  ))
-                }
-              </Form.Control>
-            </Col>
-          </Row>
+              {/*Destination*/}
+              <Row style={{ marginBottom: 10 }}>
+                <Col sm={3}>
+                  <p className="admin-form-text">Kohde</p>
+                </Col>
+                <Col sm={9}>
+                  <Form.Control
+                    as="select"
+                    name="destination"
+                    value={props.adminModalData.destination}
+                    onChange={handleChange}
+                    required>
+                    <option hidden></option>
+                    {props.selectData.destination !== undefined &&
+                      props.selectData.destination.map((destinationData, index) => (
+                        <option key={index} value={destinationData}>{destinationData}</option>
+                      ))
+                    }
+                  </Form.Control>
+                </Col>
+              </Row>
 
-          {/*Time*/}
-          <Row style={{ marginBottom: 10 }}>
-            <Col sm={3}>
-              <p className="admin-form-text">Kellonaika</p>
-            </Col>
-            <Col sm={9}>
-              <Form.Control
-                name="time"
-                value={props.adminModalDefaultData.time}
-                onChange={handleChange}
-                required>
-              </Form.Control>
-            </Col>
-          </Row>
+              {/*Time*/}
+              <Row style={{ marginBottom: 10 }}>
+                <Col sm={3}>
+                  <p className="admin-form-text">Kellonaika</p>
+                </Col>
+                <Col sm={9}>
+                  <Form.Control
+                    name="time"
+                    value={props.adminModalData.time}
+                    onChange={handleChange}
+                    required>
+                  </Form.Control>
+                </Col>
+              </Row>
 
-          {/*Direction*/}
-          <Row style={{ marginBottom: 10 }}>
-            <Col sm={3}>
-              <p className="admin-form-text">Suunta</p>
-            </Col>
-            <Col sm={9}>
-              <Form.Control
-                as="select"
-                name="direction"
-                value={props.adminModalDefaultData.direction}
-                onChange={handleChange}
-                required>
-                <option hidden></option>
-                {props.selectData.direction !== undefined &&
-                  props.selectData.direction.map((directionData, index) => (
-                    <option key={index} value={directionData}>{directionData}</option>
-                  ))
-                }
-              </Form.Control>
-            </Col>
-          </Row>
+              {/*Direction*/}
+              <Row style={{ marginBottom: 10 }}>
+                <Col sm={3}>
+                  <p className="admin-form-text">Suunta</p>
+                </Col>
+                <Col sm={9}>
+                  <Form.Control
+                    as="select"
+                    name="direction"
+                    value={props.adminModalData.direction}
+                    onChange={handleChange}
+                    required>
+                    <option hidden></option>
+                    {props.selectData.direction !== undefined &&
+                      props.selectData.direction.map((directionData, index) => (
+                        <option key={index} value={directionData}>{directionData}</option>
+                      ))
+                    }
+                  </Form.Control>
+                </Col>
+              </Row>
 
-          {/*Info*/}
-          <Row style={{ marginBottom: 10 }}>
-            <Col sm={3}>
-              <p className="admin-form-text">Lisätieto</p>
-            </Col>
-            <Col sm={9}>
-              <Form.Control
-                name="info"
-                value={props.adminModalDefaultData.info}
-                onChange={handleChange}>
-              </Form.Control>
-            </Col>
-          </Row>
-          {adminModal.mode === "new" ?
-          <Button className="w-100" type="submit">Lisää toimitus</Button>
-          :
-          <Button className="w-100" type="submit">Tallenna muutokset</Button>}
-        </Form>
+              {/*Info*/}
+              <Row style={{ marginBottom: 10 }}>
+                <Col sm={3}>
+                  <p className="admin-form-text">Lisätieto</p>
+                </Col>
+                <Col sm={9}>
+                  <Form.Control
+                    name="info"
+                    value={props.adminModalData.info}
+                    onChange={handleChange}>
+                  </Form.Control>
+                </Col>
+              </Row>
+              {adminModal.mode === "new" ?
+                <Button className="w-100" type="submit">Lisää toimitus</Button>
+                :
+                <Button className="w-100" type="submit">Tallenna muutokset</Button>}
+            </Form>
+          </div>
+          : adminModal.mode === "delete" ?
+            <div>
+
+            </div>
+            : ""}
       </Modal.Body>
     </Modal>
   );

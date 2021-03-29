@@ -164,3 +164,27 @@
     border-bottom: 2px solid var(--border-color);
     border-right: 2px solid var(--border-color);
 }
+
+.admin-form-text {
+    margin-top: 7px;
+}
+
+.delivery-modal-container {
+    padding: 16px;
+}
+
+.delivery-modal-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.delivery-modal-destination {
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.delivery-modal-name {
+    font-size: 15px;
+    font-weight: 500;
+    margin-right: 5px;
+}

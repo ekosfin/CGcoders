@@ -8,66 +8,36 @@ export function useData() {
 
 export function DataProvider({ children }) {
   //this is temp data
-  const [data, setData] = useState([/*
-    {
-      materialName: "SRF",
-      data: [
-        [{ dayItem: "12A", dayInfo: "", color: "#85A311" }],
-        [],
-        [
-          { dayItem: "15A", dayInfo: "Tämä on lisätietoa", color: "#CC4341" },
-          { dayItem: "18A", dayInfo: "", color: "#85A311" },
-        ],
-        [],
-        [{ dayItem: "13A", dayInfo: "", color: "#CC4341" }],
-        [{ dayItem: "12A", dayInfo: "", color: "#85A311" }],
-      ],
-    },
-    {
-      materialName: "VL",
-      data: [[], [], [], [], [], []],
-    },
-    {
-      materialName: "Seka",
-      data: [
-        [{ dayItem: "12A", dayInfo: "Tämä on lisätietoa", color: "#85A311" }],
-        [{ dayItem: "13A", dayInfo: "", color: "#85A311" }],
-        [],
-        [],
-        [{ dayItem: "15A", dayInfo: "", color: "#CC4341" }],
-        [{ dayItem: "18A", dayInfo: "", color: "#CC4341" }],
-      ],
-    },
-    {
-      materialName: "Metalli",
-      data: [
-        [],
-        [],
-        [{ dayItem: "12A", dayInfo: "Tämä on lisätietoa", color: "#85A311" }],
-        [],
-        [],
-        [],
-      ],
-    },
-    {
-      materialName: "Pahvi",
-      data: [
-        [],
-        [],
-        [{ dayItem: "12A", dayInfo: "Tämä on lisätietoa", color: "#85A311" }],
-        [],
-        [
-          { dayItem: "15A", dayInfo: "Tämä on lisätietoa", color: "#CC4341" },
-          { dayItem: "18A", dayInfo: "", color: "#85A311" },
-        ],
-        [],
-      ],
-    },*/
-  ]);
+  const [data, setData] = useState([]);
   const [jwtToken, setJwt] = useState();
+  const [userRights, setUserRights] = useState("admin");
+  const [idNum, setIdNum] = useState();
 
   function clearData() {
     setData([]);
+    setJwt();
+    setUserRights(null);
+  }
+
+  const modifyData = (data) => {
+    let dayList = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"];
+    if (data.schedule !== undefined && data.schedule.length > 0) {
+      let idNum = 0;
+      data.schedule.forEach(material => {
+        let dayNum = 0;
+        material.data.forEach(dayItem => {
+          dayItem.forEach(deliveryItem => {
+            deliveryItem.day = dayList[dayNum];
+            deliveryItem.material = material.materialName;
+            deliveryItem.idNum = idNum;
+            idNum++;
+          });
+          dayNum++;
+        });
+      });
+      setIdNum(idNum);
+    }
+    return data;
   }
 
   async function getData() {
@@ -85,10 +55,11 @@ export function DataProvider({ children }) {
     catch (error) {
       return false;
     }
-    if (data === "Failure") {
-      console.log("it failed");
+    if (!data) {
       return false;
-    } else {
+    }
+    else {
+      data = modifyData(data);
       setData(data);
       return true;
     }
@@ -106,16 +77,49 @@ export function DataProvider({ children }) {
     if (data.message === "Success!") {
       setJwt(data.JWT);
       return true;
-    } else {
+    }
+    else {
       return false;
     }
   }
 
+  async function sendEdits(edits) {
+    let data;
+    try {
+      let response = await fetch("/edit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jwt: jwtToken,
+          edits: edits
+        }),
+      });
+      data = await response.json();
+    }
+    catch (error) {
+      return false;
+    }
+    if (!data) {
+      return false;
+    }
+    else {
+      return true;
+  }
+}
+
+
   const value = {
     data,
-    login,
+    setData,
     getData,
     clearData,
+    login,
+    userRights,
+    idNum,
+    setIdNum,
+    sendEdits
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

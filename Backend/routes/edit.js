@@ -5,13 +5,14 @@ require("dotenv").config();
 
 router.post("/", function (req, res) {
   let url = process.env.URL;
-  url = `${url}?route=login`;
-  const data = { edit: req.body.pass };
+  url = `${url}?route=edit`;
+  //const data = { edit: req.body.pass };
+  console.log(req.body);
   request(
     {
       method: "POST",
       url: url,
-      body: data,
+      body: req.body,
       json: true,
       followAllRedirects: true,
     },

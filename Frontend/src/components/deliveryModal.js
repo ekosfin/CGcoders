@@ -23,6 +23,22 @@ function DeliveryModal(props) {
     handleAdminModal(true, "edit");
   }
 
+  const handleRemoveDelivery = () => {
+    let twoWay = props.deliveryModal.data.twoWay ? "Meno-paluu" : "Meno";
+    props.handleDeliveryModal(null, false);
+    props.setAdminModalData({
+      material: props.deliveryModal.data.material,
+      day: props.deliveryModal.data.day,
+      driver: props.deliveryModal.data.dayItem.split(" ")[0],
+      destination: props.deliveryModal.data.dayItem.split(" ")[1],
+      time: props.deliveryModal.data.dayItem.split(" ")[2],
+      direction: twoWay,
+      info: props.deliveryModal.data.dayInfo,
+      idNum: props.deliveryModal.data.idNum
+    });
+    handleAdminModal(true, "remove");
+  }
+
   return (
     props.deliveryModal.data !== null ? (
       <Modal show={props.deliveryModal.open} onHide={() => props.handleDeliveryModal(null, false)} centered>
@@ -58,7 +74,10 @@ function DeliveryModal(props) {
               {props.deliveryModal.data.twoWay ? <div>Meno-paluu</div> : <div>Meno</div>}
             </div>
             {userRights === "admin" &&
-            <Button onClick={handleEditDelivery}>Muokkaa</Button>}
+            <div>
+              <Button style={{marginRight: 10}} onClick={handleEditDelivery}>Muokkaa</Button>
+              <Button onClick={handleRemoveDelivery}>Poista</Button>
+            </div>}
           </div>
         </Modal.Body>
       </Modal>

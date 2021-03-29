@@ -83,6 +83,33 @@ export function DataProvider({ children }) {
     }
   }
 
+  async function sendEdits(edits) {
+    let data;
+    try {
+      let response = await fetch("/edit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          jwt: jwtToken,
+          edits: edits
+        }),
+      });
+      data = await response.json();
+    }
+    catch (error) {
+      return false;
+    }
+    if (!data) {
+      return false;
+    }
+    else {
+      return true;
+  }
+}
+
+
   const value = {
     data,
     setData,
@@ -91,7 +118,8 @@ export function DataProvider({ children }) {
     login,
     userRights,
     idNum,
-    setIdNum
+    setIdNum,
+    sendEdits
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

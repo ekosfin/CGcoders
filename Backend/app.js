@@ -8,6 +8,7 @@ require("dotenv").config();
 
 const loginRouter = require("./routes/login");
 const dataRouter = require("./routes/data");
+const editRouter = require("./routes/edit");
 
 const app = express();
 app.use(cors());
@@ -19,6 +20,7 @@ app.use(express.static(path.join(__dirname, "build")));
 
 app.use("/jwt", loginRouter);
 app.use("/data", dataRouter);
+app.use("/edit", editRouter);
 
 //react website
 app.get("/", function (req, res) {

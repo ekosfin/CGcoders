@@ -5,7 +5,7 @@ import { useData } from "./contexts/DataContext";
 
 function AdminModal(props) {
   const { adminModal, handleAdminModal } = useAdminData();
-  const { data, setData, idNum, setIdNum } = useData();
+  const { data, setData, idNum, setIdNum, sendEdits } = useData();
   const [adminModalOriginalData, setAdminModalOriginalData] = useState({
     material: "",
     day: ""
@@ -44,6 +44,18 @@ function AdminModal(props) {
     return edits;
   }
 
+  const sendDataAPI = async (edits) => {
+    console.log(edits)
+    let result = await sendEdits(edits);
+    if (result) {
+      console.log("Success!");
+    }
+    else {
+      console.log("Failure!");
+    }
+  }
+
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     let result, edits = [];
@@ -58,7 +70,7 @@ function AdminModal(props) {
       result = addDelivery(result.dataList, props.adminModalData.idNum);
       edits = addToEdits(edits, result.edits);
     }
-    else if (adminModal.mode === "delete") {
+    else if (adminModal.mode === "remove") {
       /*TODO */
       result = removeDelivery(data);
       edits = addToEdits(edits, result.edits);
@@ -66,6 +78,8 @@ function AdminModal(props) {
     //console.log(dataList);
     setData(result.dataList);
     handleAdminModal(false, null);
+
+    sendDataAPI(edits);
   }
 
 
@@ -103,7 +117,6 @@ function AdminModal(props) {
                 day: props.adminModalData.day,
                 data: dayItem
               }
-              /*TODO: Send dayItem list to sheets */
             }
             dayNum++;
             return dayItem;
@@ -149,8 +162,8 @@ function AdminModal(props) {
           <Modal.Title>Uuden toimituksen luominen</Modal.Title>
         ) : adminModal.mode === "edit" ? (
           <Modal.Title>Toimituksen muokkaaminen</Modal.Title>
-        ) : adminModal.mode === "delete" ? (
-          <Modal.Title>Toimituksen poistaminen</Modal.Title>
+        ) : adminModal.mode === "remove" ? (
+          <Modal.Title>Haluatko varmasti poistaa seuraavan toimituksen?</Modal.Title>
         ) : ""}
       </Modal.Header>
       <Modal.Body>
@@ -306,10 +319,12 @@ function AdminModal(props) {
                 <Button className="w-100" type="submit">Tallenna muutokset</Button>}
             </Form>
           </div>
-          : adminModal.mode === "delete" ?
-            <div>
-
-            </div>
+          : adminModal.mode === "remove" ?
+            <Form onSubmit={handleSubmit}>
+              <p>{props.adminModalData.destination} | {props.adminModalData.day}, kello {props.adminModalData.time}</p>
+              <Button style={{marginRight: 10}} type="submit">Kyllä</Button>
+              <Button onClick={() => handleAdminModal(false, null)}>Peruuta</Button>
+            </Form>
             : ""}
       </Modal.Body>
     </Modal>

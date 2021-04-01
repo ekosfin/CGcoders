@@ -6,8 +6,6 @@ require("dotenv").config();
 router.post("/", function (req, res) {
   let url = process.env.URL;
   url = `${url}?route=edit`;
-  //const data = { edit: req.body.pass };
-  console.log(req.body);
   request(
     {
       method: "POST",

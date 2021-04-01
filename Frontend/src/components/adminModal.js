@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Form, Modal, Row, Button } from "react-bootstrap";
+import { Col, Form, Modal, Row, Button, Spinner } from "react-bootstrap";
 import { useAdminData } from "./contexts/AdminDataContext";
 import { useData } from "./contexts/DataContext";
 
@@ -9,7 +9,8 @@ function AdminModal(props) {
   const [adminModalOriginalData, setAdminModalOriginalData] = useState({
     material: "",
     day: ""
-  })
+  });
+  const [loading, setLoading] = useState(false);
 
 
   useEffect(() => {
@@ -44,27 +45,31 @@ function AdminModal(props) {
     return edits;
   }
 
-  const sendDataAPI = async (edits) => {
-    console.log(edits)
+  const sendDataAPI = async (edits, localData) => {
+    setLoading(true);
     let result = await sendEdits(edits);
     if (result) {
       console.log("Success!");
+      setData(localData);
     }
     else {
       console.log("Failure!");
     }
+    setLoading(false);
+    handleAdminModal(false, null);
   }
 
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    let result, edits = [];
+    let result, edits = [], dataList;
+    dataList = JSON.parse(JSON.stringify(data));
     if (adminModal.mode === "new") {
-      result = addDelivery(data, idNum);
+      result = addDelivery(dataList, idNum);
       edits = addToEdits(edits, result.edits);
     }
     else if (adminModal.mode === "edit") {
-      result = removeDelivery(data);
+      result = removeDelivery(dataList);
       edits = addToEdits(edits, result.edits);
 
       result = addDelivery(result.dataList, props.adminModalData.idNum);
@@ -72,14 +77,11 @@ function AdminModal(props) {
     }
     else if (adminModal.mode === "remove") {
       /*TODO */
-      result = removeDelivery(data);
+      result = removeDelivery(dataList);
       edits = addToEdits(edits, result.edits);
     }
     //console.log(dataList);
-    setData(result.dataList);
-    handleAdminModal(false, null);
-
-    sendDataAPI(edits);
+    sendDataAPI(edits, result.dataList);
   }
 
 
@@ -157,6 +159,13 @@ function AdminModal(props) {
 
   return (
     <Modal show={adminModal.open} onHide={() => handleAdminModal(false, null)} centered>
+      {loading && <div>
+        <div className="admin-modal-loading-dark">
+        </div>
+        <div className="admin-modal-loading">
+          <Spinner variant="primary" animation="border"/>
+        </div>
+      </div>}
       <Modal.Header closeButton>
         {adminModal.mode === "new" ? (
           <Modal.Title>Uuden toimituksen luominen</Modal.Title>
@@ -314,16 +323,16 @@ function AdminModal(props) {
                 </Col>
               </Row>
               {adminModal.mode === "new" ?
-                <Button className="w-100" type="submit">Lisää toimitus</Button>
+                <Button className="w-100" type="submit" disabled={loading}>Lisää toimitus</Button>
                 :
-                <Button className="w-100" type="submit">Tallenna muutokset</Button>}
+                <Button className="w-100" type="submit" disabled={loading}>Tallenna muutokset</Button>}
             </Form>
           </div>
           : adminModal.mode === "remove" ?
             <Form onSubmit={handleSubmit}>
               <p>{props.adminModalData.destination} | {props.adminModalData.day}, kello {props.adminModalData.time}</p>
-              <Button style={{marginRight: 10}} type="submit">Kyllä</Button>
-              <Button onClick={() => handleAdminModal(false, null)}>Peruuta</Button>
+              <Button style={{ marginRight: 10 }} type="submit" disabled={loading}>Kyllä</Button>
+              <Button onClick={() => handleAdminModal(false, null)} disabled={loading}>Peruuta</Button>
             </Form>
             : ""}
       </Modal.Body>

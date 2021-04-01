@@ -19,25 +19,28 @@ export function DataProvider({ children }) {
     setUserRights(null);
   }
 
-  const modifyData = (data) => {
+  const modifyData = (dataList) => {
     let dayList = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"];
-    if (data.schedule !== undefined && data.schedule.length > 0) {
+    if (dataList.schedule !== undefined && dataList.schedule.length > 0) {
       let idNum = 0;
-      data.schedule.forEach(material => {
+      dataList.schedule = dataList.schedule.map(material => {
         let dayNum = 0;
-        material.data.forEach(dayItem => {
-          dayItem.forEach(deliveryItem => {
+        material.data = material.data.map(dayItem => {
+          dayItem = dayItem.map(deliveryItem => {
             deliveryItem.day = dayList[dayNum];
             deliveryItem.material = material.materialName;
             deliveryItem.idNum = idNum;
             idNum++;
+            return deliveryItem;
           });
           dayNum++;
+          return dayItem;
         });
+        return material;
       });
       setIdNum(idNum);
     }
-    return data;
+    return dataList;
   }
 
   async function getData() {

@@ -11,8 +11,6 @@ router.post("/", function (req, res) {
   url = `${url}?route=data`;
   const api = process.env.API_KEY;
   const data = { email: req.user.email, API: api };
-  //TODO delete diagnosis
-  console.log(data);
   request(
     {
       method: "POST",

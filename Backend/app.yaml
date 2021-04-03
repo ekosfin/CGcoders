@@ -2,3 +2,5 @@ runtime: nodejs14
 
 env_variables:
   URL: "REPLACE_URL"
+  API_KEY: "REPLACE_API_KEY"
+  CLIENT_ID: "REPLACE_CLIENT_ID"

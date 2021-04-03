@@ -19,7 +19,7 @@ export function DataProvider({ children }) {
     setUserRights(null);
   }
 
-  const modifyData = (dataList) => {
+  const modifyData = (data) => {
     let dayList = [
       "Maanantai",
       "Tiistai",
@@ -29,22 +29,19 @@ export function DataProvider({ children }) {
       "Lauantai",
       "Sunnuntai",
     ];
-    if (dataList.schedule !== undefined && dataList.schedule.length > 0) {
+    if (data.schedule !== undefined && data.schedule.length > 0) {
       let idNum = 0;
-      dataList.schedule = dataList.schedule.map((material) => {
+      data.schedule.forEach((material) => {
         let dayNum = 0;
-        material.data = material.data.map((dayItem) => {
-          dayItem = dayItem.map((deliveryItem) => {
+        material.data.forEach((dayItem) => {
+          dayItem.forEach((deliveryItem) => {
             deliveryItem.day = dayList[dayNum];
             deliveryItem.material = material.materialName;
             deliveryItem.idNum = idNum;
             idNum++;
-            return deliveryItem;
           });
           dayNum++;
-          return dayItem;
         });
-        return material;
       });
       setIdNum(idNum);
     }

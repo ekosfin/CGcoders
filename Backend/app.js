@@ -24,6 +24,10 @@ app.use("/edit", editRouter);
 app.get("/", function (req, res) {
   res.sendFile(path.join(__dirname, "build", "index.html"));
 });
+//react website
+app.get("/home", function (req, res) {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
+});
 
 // error handling
 app.use(function (err, req, res, next) {

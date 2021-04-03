@@ -2,32 +2,27 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert, Container, Spinner } from "react-bootstrap";
 import { useData } from "./contexts/DataContext";
 import { useHistory } from "react-router-dom";
+import { GoogleLogin } from "react-google-login";
 
 export default function Login() {
   const passwordRef = useRef();
-  const { login } = useData();
+  const { REACT_APP_CLIENT_ID, setTokenObj } = useData();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
+  const successGoogleLogin = (response) => {
+    setTokenObj(response.tokenObj);
+    history.push("/home");
+  };
+
+  const failedGoogleLogin = (response) => {
+    setError("Sisäänkirjautuminen epäonnistui. Yritä uudelleen.");
+  };
+
   async function handleSubmit(e) {
     e.preventDefault();
-
-    try {
-      setError("");
-      setLoading(true);
-      let success = await login(passwordRef.current.value);
-      setLoading(false);
-      if (success) {
-        history.push("/home");
-      } else {
-        setError("Väärä salasana");
-      }
-    } catch (error) {
-      console.error(error);
-      setError("Väärä salasana");
-      setLoading(false);
-    }
+    setError("Tämä kirjautumis tapa ei ole käytössä");
   }
 
   return (
@@ -55,6 +50,22 @@ export default function Login() {
                   <Button disabled={loading} className="w-100" type="submit">
                     Kirjaudu sisään
                   </Button>
+                  <GoogleLogin
+                    clientId={REACT_APP_CLIENT_ID}
+                    render={(renderProps) => (
+                      <Button
+                        onClick={renderProps.onClick}
+                        disabled={renderProps.disabled}
+                        className="w-100"
+                      >
+                        Google sisäänkirjautuminen
+                      </Button>
+                    )}
+                    buttonText="Login"
+                    onSuccess={successGoogleLogin}
+                    onFailure={failedGoogleLogin}
+                    cookiePolicy={"single_host_origin"}
+                  />
                 </Form>
               </Card.Body>
             </Card>

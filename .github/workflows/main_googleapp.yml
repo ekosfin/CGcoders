@@ -44,6 +44,20 @@ jobs:
           replace: ${{ secrets.URL }}
           include: app.yaml
 
+      - name: Find and replace API key secrets
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "REPLACE_API_KEY"
+          replace: ${{ secrets.API_KEY }}
+          include: app.yaml
+
+      - name: Find and replace CLIENT ID secrets
+        uses: jacobtomlinson/gha-find-replace@master
+        with:
+          find: "REPLACE_CLIENT_ID"
+          replace: ${{ secrets.CLIENT_ID }}
+          include: app.yaml
+
       - name: Deploy to google app engine
         uses: google-github-actions/deploy-appengine@main
         with:

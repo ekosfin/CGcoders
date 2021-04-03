@@ -6,7 +6,6 @@ const logger = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
-const loginRouter = require("./routes/login");
 const dataRouter = require("./routes/data");
 const editRouter = require("./routes/edit");
 
@@ -18,7 +17,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "build")));
 
-app.use("/jwt", loginRouter);
 app.use("/data", dataRouter);
 app.use("/edit", editRouter);
 

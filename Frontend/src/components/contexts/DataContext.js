@@ -9,24 +9,32 @@ export function useData() {
 export function DataProvider({ children }) {
   //this is temp data
   const [data, setData] = useState([]);
-  const [jwtToken, setJwt] = useState();
   const [userRights, setUserRights] = useState("admin");
   const [idNum, setIdNum] = useState();
+  const [tokenObj, setTokenObj] = useState(null);
+  const { REACT_APP_CLIENT_ID } = process.env;
 
   function clearData() {
     setData([]);
-    setJwt();
     setUserRights(null);
   }
 
   const modifyData = (data) => {
-    let dayList = ["Maanantai", "Tiistai", "Keskiviikko", "Torstai", "Perjantai", "Lauantai", "Sunnuntai"];
+    let dayList = [
+      "Maanantai",
+      "Tiistai",
+      "Keskiviikko",
+      "Torstai",
+      "Perjantai",
+      "Lauantai",
+      "Sunnuntai",
+    ];
     if (data.schedule !== undefined && data.schedule.length > 0) {
       let idNum = 0;
-      data.schedule.forEach(material => {
+      data.schedule.forEach((material) => {
         let dayNum = 0;
-        material.data.forEach(dayItem => {
-          dayItem.forEach(deliveryItem => {
+        material.data.forEach((dayItem) => {
+          dayItem.forEach((deliveryItem) => {
             deliveryItem.day = dayList[dayNum];
             deliveryItem.material = material.materialName;
             deliveryItem.idNum = idNum;
@@ -38,6 +46,27 @@ export function DataProvider({ children }) {
       setIdNum(idNum);
     }
     return data;
+  };
+
+  const getPermissions = (data) => {
+    if (data.permissions === "edit") {
+      setUserRights("admin");
+    } else {
+      setUserRights(null);
+    }
+    return true;
+  };
+
+  function handleEmailReject() {
+    //TODO this function is called when email is not on list
+  }
+
+  function handleEmailError() {
+    //TODO this function is called when emails permissions is not regoniced by the sheets API
+  }
+
+  function handleAPIError() {
+    //TODO this function is a catch all for error coming from API or gateway
   }
 
   async function getData() {
@@ -46,40 +75,31 @@ export function DataProvider({ children }) {
       let response = await fetch("/data", {
         method: "POST",
         headers: {
+          Authorization: tokenObj.id_token,
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ jwt: jwtToken }),
+        body: JSON.stringify({}),
       });
       data = await response.json();
-    }
-    catch (error) {
+    } catch (error) {
       return false;
     }
     if (!data) {
       return false;
-    }
-    else {
+    } else {
+      if ("message" in data) {
+        if (data.message === "Email not in system") {
+          handleEmailReject();
+        } else if (data.message === "Error in sheets") {
+          handleEmailError();
+        } else {
+          handleAPIError();
+        }
+      }
+      getPermissions(data);
       data = modifyData(data);
       setData(data);
       return true;
-    }
-  }
-
-  async function login(password) {
-    let response = await fetch("/jwt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ pass: password }),
-    });
-    let data = await response.json();
-    if (data.message === "Success!") {
-      setJwt(data.JWT);
-      return true;
-    }
-    else {
-      return false;
     }
   }
 
@@ -89,37 +109,36 @@ export function DataProvider({ children }) {
       let response = await fetch("/edit", {
         method: "POST",
         headers: {
+          Authorization: tokenObj.id_token,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          jwt: jwtToken,
-          edits: edits
+          edits: edits,
         }),
       });
       data = await response.json();
-    }
-    catch (error) {
+    } catch (error) {
       return false;
     }
     if (!data) {
       return false;
-    }
-    else {
+    } else {
       return true;
+    }
   }
-}
-
 
   const value = {
     data,
     setData,
     getData,
     clearData,
-    login,
     userRights,
     idNum,
     setIdNum,
-    sendEdits
+    sendEdits,
+    tokenObj,
+    setTokenObj,
+    REACT_APP_CLIENT_ID,
   };
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;

@@ -3,10 +3,16 @@ const router = express.Router();
 const request = require("request");
 require("dotenv").config();
 
+//confirm user email
+router.use(require("../middleware/auth"));
+
 router.post("/", function (req, res) {
   let url = process.env.URL;
-  url = `${url}?route=watch`;
-  const data = { jwt: req.body.jwt };
+  url = `${url}?route=data`;
+  const api = process.env.API_KEY;
+  const data = { email: req.user.email, API: api };
+  //TODO delete diagnosis
+  console.log(data);
   request(
     {
       method: "POST",
@@ -24,4 +30,5 @@ router.post("/", function (req, res) {
     }
   );
 });
+
 module.exports = router;

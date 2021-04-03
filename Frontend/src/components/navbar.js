@@ -3,14 +3,17 @@ import { Navbar, Nav, Button } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import { useAdminData } from "./contexts/AdminDataContext";
 import { useData } from "./contexts/DataContext";
+import Logo from "../logoWhiteFont.svg";
+import { GoogleLogout } from "react-google-login";
 
 export default function NavBar() {
   const history = useHistory();
   const { handleAdminModal } = useAdminData();
-  const { userRights } = useData();
+  const { userRights, REACT_APP_CLIENT_ID, setTokenObj } = useData();
 
   function handleLogout() {
     //TODO fill fuctionality
+    setTokenObj(null);
     history.push("/");
   }
 
@@ -21,18 +24,43 @@ export default function NavBar() {
       expand="md"
       variant="dark"
     >
-      <Navbar.Brand className="navbar-logo-container">Logo</Navbar.Brand>
+      <Navbar.Brand className="navbar-logo-container">
+        <img alt="" src={Logo} />
+      </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="navbar-button-container">
-          {userRights === "admin" ?
-            <Button style={{ margin: 5 }} variant="outline-light" onClick={() => handleAdminModal(true, "new")}>
+          {userRights === "admin" ? (
+            <Button
+              style={{ margin: 5 }}
+              variant="outline-light"
+              onClick={() => handleAdminModal(true, "new")}
+            >
               Uusi toimitus
             </Button>
-            : ""}
-          <Button style={{ margin: 5 }} variant="outline-light" onClick={handleLogout}>
+          ) : (
+            ""
+          )}
+          <Button
+            style={{ margin: 5 }}
+            variant="outline-light"
+            onClick={handleLogout}
+          >
             Kirjaudu ulos
-            </Button>
+          </Button>
+          <GoogleLogout
+            clientId={REACT_APP_CLIENT_ID}
+            onLogoutSuccess={handleLogout}
+            render={(renderProps) => (
+              <Button
+                onClick={renderProps.onClick}
+                style={{ margin: 5 }}
+                variant="outline-light"
+              >
+                Google kirjaudu ulos
+              </Button>
+            )}
+          />
         </Nav>
       </Navbar.Collapse>
     </Navbar>

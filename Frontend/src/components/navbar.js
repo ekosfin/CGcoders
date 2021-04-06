@@ -12,7 +12,6 @@ export default function NavBar() {
   const { userRights, REACT_APP_CLIENT_ID, setTokenObj } = useData();
 
   function handleLogout() {
-    //TODO fill fuctionality
     setTokenObj(null);
     history.push("/");
   }

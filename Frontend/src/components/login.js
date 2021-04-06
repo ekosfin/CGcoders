@@ -1,14 +1,12 @@
-import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert, Container, Spinner } from "react-bootstrap";
+import React, { useState } from "react";
+import { Button, Card, Alert, Container } from "react-bootstrap";
 import { useData } from "./contexts/DataContext";
 import { useHistory } from "react-router-dom";
 import { GoogleLogin } from "react-google-login";
 
 export default function Login() {
-  const passwordRef = useRef();
   const { REACT_APP_CLIENT_ID, setTokenObj } = useData();
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const history = useHistory();
 
   const successGoogleLogin = (response) => {
@@ -19,11 +17,6 @@ export default function Login() {
   const failedGoogleLogin = (response) => {
     setError("Sisäänkirjautuminen epäonnistui. Yritä uudelleen.");
   };
-
-  async function handleSubmit(e) {
-    e.preventDefault();
-    setError("Tämä kirjautumis tapa ei ole käytössä");
-  }
 
   return (
     <>
@@ -37,7 +30,6 @@ export default function Login() {
               <Card.Body>
                 <h2 className="text-center mb-4">Remeo login</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
-
                 <GoogleLogin
                   clientId={REACT_APP_CLIENT_ID}
                   render={(renderProps) => (

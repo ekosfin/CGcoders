@@ -37,36 +37,23 @@ export default function Login() {
               <Card.Body>
                 <h2 className="text-center mb-4">Remeo login</h2>
                 {error && <Alert variant="danger">{error}</Alert>}
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group id="password">
-                    <Form.Label>Päivän salasana</Form.Label>
-                    <Form.Control type="password" ref={passwordRef} required />
-                  </Form.Group>
-                  {loading && (
-                    <Spinner animation="border" role="status">
-                      <span className="sr-only">Loading...</span>
-                    </Spinner>
+
+                <GoogleLogin
+                  clientId={REACT_APP_CLIENT_ID}
+                  render={(renderProps) => (
+                    <Button
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                      className="w-100"
+                    >
+                      Google sisäänkirjautuminen
+                    </Button>
                   )}
-                  <Button disabled={loading} className="w-100" type="submit">
-                    Kirjaudu sisään
-                  </Button>
-                  <GoogleLogin
-                    clientId={REACT_APP_CLIENT_ID}
-                    render={(renderProps) => (
-                      <Button
-                        onClick={renderProps.onClick}
-                        disabled={renderProps.disabled}
-                        className="w-100"
-                      >
-                        Google sisäänkirjautuminen
-                      </Button>
-                    )}
-                    buttonText="Login"
-                    onSuccess={successGoogleLogin}
-                    onFailure={failedGoogleLogin}
-                    cookiePolicy={"single_host_origin"}
-                  />
-                </Form>
+                  buttonText="Login"
+                  onSuccess={successGoogleLogin}
+                  onFailure={failedGoogleLogin}
+                  cookiePolicy={"single_host_origin"}
+                />
               </Card.Body>
             </Card>
           </div>

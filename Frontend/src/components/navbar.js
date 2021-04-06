@@ -41,13 +41,6 @@ export default function NavBar() {
           ) : (
             ""
           )}
-          <Button
-            style={{ margin: 5 }}
-            variant="outline-light"
-            onClick={handleLogout}
-          >
-            Kirjaudu ulos
-          </Button>
           <GoogleLogout
             clientId={REACT_APP_CLIENT_ID}
             onLogoutSuccess={handleLogout}
@@ -57,7 +50,7 @@ export default function NavBar() {
                 style={{ margin: 5 }}
                 variant="outline-light"
               >
-                Google kirjaudu ulos
+                Kirjaudu ulos
               </Button>
             )}
           />

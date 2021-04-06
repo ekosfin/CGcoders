@@ -89,8 +89,10 @@ export function DataProvider({ children }) {
     } else {
       if (data.message === "Email not in system") {
         handleEmailReject();
+        return false;
       } else if (data.message === "Error in sheets") {
         handleEmailError();
+        return false;
       }
       getPermissions(data);
       data = modifyData(data);

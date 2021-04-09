@@ -12,6 +12,7 @@ export function DataProvider({ children }) {
   const [userRights, setUserRights] = useState("admin");
   const [idNum, setIdNum] = useState();
   const [tokenObj, setTokenObj] = useState(null);
+  const [loadingData, setLoadingData] = useState(false);
   const { REACT_APP_CLIENT_ID } = process.env;
 
   function clearData() {
@@ -31,17 +32,32 @@ export function DataProvider({ children }) {
     ];
     if (data.schedule !== undefined && data.schedule.length > 0) {
       let idNum = 0;
-      data.schedule.forEach((material) => {
+      data.schedule = data.schedule.map((material) => {
         let dayNum = 0;
-        material.data.forEach((dayItem) => {
-          dayItem.forEach((deliveryItem) => {
+        material.data = material.data.map((dayItem) => {
+          dayItem = dayItem.map((deliveryItem) => {
             deliveryItem.day = dayList[dayNum];
             deliveryItem.material = material.materialName;
             deliveryItem.idNum = idNum;
             idNum++;
+
+            let dayItemList = deliveryItem.dayItem?.split(" ");
+            if (dayItemList?.length > 2) {
+              deliveryItem.driver = dayItemList[0];
+              deliveryItem.destination = dayItemList[1];
+              deliveryItem.time = dayItemList[2];
+            }
+            else {
+              deliveryItem.driver = "-";
+              deliveryItem.destination = "-";
+              deliveryItem.time = "-";
+            }
+            return deliveryItem;
           });
           dayNum++;
+          return dayItem;
         });
+        return material;
       });
       setIdNum(idNum);
     }
@@ -136,6 +152,8 @@ export function DataProvider({ children }) {
     sendEdits,
     tokenObj,
     setTokenObj,
+    loadingData,
+    setLoadingData,
     REACT_APP_CLIENT_ID,
   };
 

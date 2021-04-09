@@ -169,6 +169,11 @@
     margin-top: 7px;
 }
 
+.delivery-modal-date-row {
+    display: flex;
+    flex-direction: row;
+}
+
 .delivery-modal-container {
     padding: 16px;
 }

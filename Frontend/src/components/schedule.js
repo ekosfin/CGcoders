@@ -6,7 +6,7 @@ import AdminModal from "./adminModal";
 import twoWay from "../twoWay.svg";
 
 export default function Schedule() {
-  const { data, getData, clearData, userRights } = useData();
+  const { data, getData, clearData, userRights, setLoadingData } = useData();
 
   const [deliveryModal, setDeliveryModal] = useState({
     open: false,
@@ -28,7 +28,6 @@ export default function Schedule() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isCancelled, setIsCancelled] = useState(false);
-  const INTERVAL_TIME = 5 * 60 * 1000;
 
   const setAdminModalSelectData = (data) => {
     let adminModalDataList = [], materialList = [], driverList = [];
@@ -47,6 +46,7 @@ export default function Schedule() {
   }
 
   const fetchData = async () => {
+    setLoadingData(true);
     let result = await getData();
     if (isCancelled) {
       return;
@@ -59,8 +59,9 @@ export default function Schedule() {
       setError("Tietojen hakeminen epäonnistui. Yritetään uudelleen hetken kuluttua.");
     }
     if (loading) {
-      setLoading(false)
+      setLoading(false);
     }
+    setLoadingData(false);
   }
 
   //Fetches data on first load and sets an INTERVAL_TIME minute timer to reload data
@@ -70,7 +71,7 @@ export default function Schedule() {
     const timer = setInterval(() => {
       console.log("Loading new data");
       fetchData();
-    }, INTERVAL_TIME);
+    }, 1 * 60 * 1000);
 
     //Handle logout, clearing data
     return () => {
@@ -82,6 +83,7 @@ export default function Schedule() {
   }, []);
 
   useEffect(() => {
+    console.log(data);
     if (data.schedule !== undefined && data.schedule.length > 0 && userRights === "admin") {
       setAdminModalSelectData(data);
     }
@@ -96,13 +98,13 @@ export default function Schedule() {
     });
   }
 
-  const editData = (data) => {
+  /*const editData = (data) => {
     let dataList = data.dayItem.split(" ");
     if (dataList.length > 2) {
       return (dataList[0].substring(0, 2) + " " + dataList[1].substring(0, 1) + dataList[2]);
     }
     return null;
-  }
+  }*/
 
 
 
@@ -159,7 +161,7 @@ export default function Schedule() {
                           {dayData.dayInfo.length > 0 ? (
                             <div>
                               <div className="grid-text-bold">
-                                {editData(dayData)}
+                                {dayData.driver?.substring(0,2) + " " + dayData.destination?.substring(0,1) + dayData.time}
                                 {dayData.twoWay && <img style={{ margin: 5 }} alt="Two way" src={twoWay} />}
                               </div>
                               <div className="grid-info">{dayData.dayInfo}</div>
@@ -167,7 +169,7 @@ export default function Schedule() {
                           ) : (
                             <div>
                               <div className="grid-text-normal">
-                                {editData(dayData)}
+                                {dayData.driver?.substring(0,2) + " " + dayData.destination?.substring(0,1) + dayData.time}
                                 {dayData.twoWay && <img style={{ margin: 5 }} alt="Two way" src={twoWay} />}
                               </div>
                             </div>

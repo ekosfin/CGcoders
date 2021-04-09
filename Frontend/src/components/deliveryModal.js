@@ -13,9 +13,9 @@ function DeliveryModal(props) {
     props.setAdminModalData({
       material: props.deliveryModal.data.material,
       day: props.deliveryModal.data.day,
-      driver: props.deliveryModal.data.dayItem.split(" ")[0],
-      destination: props.deliveryModal.data.dayItem.split(" ")[1],
-      time: props.deliveryModal.data.dayItem.split(" ")[2],
+      driver: props.deliveryModal.data.driver,
+      destination: props.deliveryModal.data.destination,
+      time: props.deliveryModal.data.time,
       direction: twoWay,
       info: props.deliveryModal.data.dayInfo,
       idNum: props.deliveryModal.data.idNum
@@ -29,9 +29,9 @@ function DeliveryModal(props) {
     props.setAdminModalData({
       material: props.deliveryModal.data.material,
       day: props.deliveryModal.data.day,
-      driver: props.deliveryModal.data.dayItem.split(" ")[0],
-      destination: props.deliveryModal.data.dayItem.split(" ")[1],
-      time: props.deliveryModal.data.dayItem.split(" ")[2],
+      driver: props.deliveryModal.data.driver,
+      destination: props.deliveryModal.data.destination,
+      time: props.deliveryModal.data.time,
       direction: twoWay,
       info: props.deliveryModal.data.dayInfo,
       idNum: props.deliveryModal.data.idNum
@@ -50,9 +50,11 @@ function DeliveryModal(props) {
         <Modal.Body style={{ padding: 0 }}>
           <div className="delivery-modal-container">
             <div className="delivery-modal-destination">
-              {props.deliveryModal.data.dayItem.split(" ")[1]}
+              {props.deliveryModal.data.destination}
             </div>
-            {props.deliveryModal.data.day}, kello {props.deliveryModal.data.dayItem.split(" ")[2]}
+            <div className="delivery-modal-date-row">
+              {props.deliveryModal.data.day} {props.deliveryModal.data.time !== "" && <div>, kello {props.deliveryModal.data.time}</div>}
+            </div>
           </div>
           <hr style={{ margin: 0 }} />
           <div className="delivery-modal-container">
@@ -63,7 +65,7 @@ function DeliveryModal(props) {
 
             <div className="delivery-modal-info">
               <div className="delivery-modal-name">Kuljettaja:</div>
-              {props.deliveryModal.data.dayItem.split(" ")[0]}
+              {props.deliveryModal.data.driver}
             </div>
             <div className="delivery-modal-info">
               <div className="delivery-modal-name">Lisätieto:</div>
@@ -74,7 +76,7 @@ function DeliveryModal(props) {
               {props.deliveryModal.data.twoWay ? <div>Meno-paluu</div> : <div>Meno</div>}
             </div>
             {userRights === "admin" &&
-            <div>
+            <div style={{ marginTop: 16 }}>
               <Button style={{marginRight: 10}} onClick={handleEditDelivery}>Muokkaa</Button>
               <Button onClick={handleRemoveDelivery}>Poista</Button>
             </div>}

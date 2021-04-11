@@ -22,7 +22,7 @@ export default function Schedule() {
     info: "",
     idNum: null
   });
-  const [selectData, setSelectData] = useState([]);
+  const [selectData, setSelectData] = useState({});
 
 
   const [loading, setLoading] = useState(true);
@@ -30,7 +30,7 @@ export default function Schedule() {
   const [isCancelled, setIsCancelled] = useState(false);
 
   const setAdminModalSelectData = (data) => {
-    let adminModalDataList = [], materialList = [], driverList = [];
+    let adminModalDataList = {}, materialList = [], driverList = [];
     data.schedule.forEach(element => {
       materialList.push(element.materialName);
     });

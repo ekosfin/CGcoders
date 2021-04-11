@@ -220,12 +220,13 @@ function AdminModal(props) {
               {/*Material*/}
               <Row style={{ marginBottom: 10 }}>
                 <Col sm={3}>
-                  <p className="admin-form-text">Materiaali</p>
+                  <label className="admin-form-text" htmlFor="material">Materiaali</label>
                 </Col>
                 <Col sm={9}>
                   <Form.Control
                     as="select"
                     name="material"
+                    id="material"
                     value={props.adminModalData.material}
                     onChange={handleChange}
                     required>
@@ -242,12 +243,13 @@ function AdminModal(props) {
               {/*Day*/}
               <Row>
                 <Col sm={3}>
-                  <p className="admin-form-text">Viikonpäivä</p>
+                  <label className="admin-form-text" htmlFor="day">Viikonpäivä</label>
                 </Col>
                 <Col sm={9}>
                   <Form.Control
                     as="select"
                     name="day"
+                    id="day"
                     value={props.adminModalData.day}
                     onChange={handleChange}
                     required>
@@ -269,12 +271,13 @@ function AdminModal(props) {
               {/*Driver*/}
               <Row style={{ marginBottom: 10 }}>
                 <Col sm={3}>
-                  <p className="admin-form-text">Kuljettaja</p>
+                  <label className="admin-form-text" htmlFor="driver">Kuljettaja</label>
                 </Col>
                 <Col sm={9}>
                   <Form.Control
                     as="select"
                     name="driver"
+                    id="driver"
                     value={props.adminModalData.driver}
                     onChange={handleChange}
                     required>
@@ -291,12 +294,13 @@ function AdminModal(props) {
               {/*Destination*/}
               <Row style={{ marginBottom: 10 }}>
                 <Col sm={3}>
-                  <p className="admin-form-text">Kohde</p>
+                  <label className="admin-form-text" htmlFor="destination">Kohde</label>
                 </Col>
                 <Col sm={9}>
                   <Form.Control
                     as="select"
                     name="destination"
+                    id="destination"
                     value={props.adminModalData.destination}
                     onChange={handleChange}
                     required>
@@ -313,11 +317,12 @@ function AdminModal(props) {
               {/*Time*/}
               <Row style={{ marginBottom: 10 }}>
                 <Col sm={3}>
-                  <p className="admin-form-text">Kellonaika</p>
+                  <label className="admin-form-text" htmlFor="time">Kellonaika</label>
                 </Col>
                 <Col sm={9}>
                   <Form.Control
                     name="time"
+                    id="time"
                     value={props.adminModalData.time}
                     onChange={handleChange}>
                   </Form.Control>
@@ -327,12 +332,13 @@ function AdminModal(props) {
               {/*Direction*/}
               <Row style={{ marginBottom: 10 }}>
                 <Col sm={3}>
-                  <p className="admin-form-text">Suunta</p>
+                  <label className="admin-form-text" htmlFor="direction">Suunta</label>
                 </Col>
                 <Col sm={9}>
                   <Form.Control
                     as="select"
                     name="direction"
+                    id="direction"
                     value={props.adminModalData.direction}
                     onChange={handleChange}
                     required>
@@ -349,11 +355,12 @@ function AdminModal(props) {
               {/*Info*/}
               <Row style={{ marginBottom: 10 }}>
                 <Col sm={3}>
-                  <p className="admin-form-text">Lisätieto</p>
+                  <label className="admin-form-text" htmlFor="info">Lisätieto</label>
                 </Col>
                 <Col sm={9}>
                   <Form.Control
                     name="info"
+                    id="info"
                     value={props.adminModalData.info}
                     onChange={handleChange}>
                   </Form.Control>

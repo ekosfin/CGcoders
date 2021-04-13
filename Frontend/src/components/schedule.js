@@ -71,7 +71,7 @@ export default function Schedule() {
     const timer = setInterval(() => {
       console.log("Loading new data");
       fetchData();
-    }, 1 * 60 * 1000);
+    }, 10 * 60 * 1000);
 
     //Handle logout, clearing data
     return () => {
@@ -91,22 +91,12 @@ export default function Schedule() {
 
 
   //Handles delivery modal open / close
-  const handleDeliveryModal = (dayData, openState) => {
+  const handleDeliveryModal = (openState, dayData) => {
     setDeliveryModal({
       open: openState,
       data: dayData
     });
   }
-
-  /*const editData = (data) => {
-    let dataList = data.dayItem.split(" ");
-    if (dataList.length > 2) {
-      return (dataList[0].substring(0, 2) + " " + dataList[1].substring(0, 1) + dataList[2]);
-    }
-    return null;
-  }*/
-
-
 
   return (
     <div>
@@ -157,7 +147,7 @@ export default function Schedule() {
                       className="grid-item-container"
                       key={index2}>
                       {dataItem.map((dayData, index3) => (
-                        <div style={{ backgroundColor: dayData.color }} className="grid-item" onClick={() => { handleDeliveryModal(dayData, true) }} key={index3}>
+                        <div style={{ backgroundColor: dayData.color }} className="grid-item" onClick={() => { handleDeliveryModal(true, dayData) }} key={index3}>
                           {dayData.dayInfo.length > 0 ? (
                             <div>
                               <div className="grid-text-bold">

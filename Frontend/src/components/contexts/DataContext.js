@@ -8,15 +8,15 @@ export function useData() {
 
 export function DataProvider({ children }) {
   //this is temp data
-  const [data, setData] = useState([]);
-  const [userRights, setUserRights] = useState("admin");
-  const [idNum, setIdNum] = useState();
+  const [data, setData] = useState({});
+  const [userRights, setUserRights] = useState(null);
+  const [idNum, setIdNum] = useState(0);
   const [tokenObj, setTokenObj] = useState(null);
   const [loadingData, setLoadingData] = useState(false);
   const { REACT_APP_CLIENT_ID } = process.env;
 
   function clearData() {
-    setData([]);
+    setData({});
     setUserRights(null);
   }
 
@@ -88,7 +88,7 @@ export function DataProvider({ children }) {
   async function getData() {
     let data;
     try {
-      let response = await fetch("/data", {
+      let response = await fetch("http://localhost:8080/data", {
         method: "POST",
         headers: {
           Authorization: tokenObj.id_token,
@@ -120,7 +120,7 @@ export function DataProvider({ children }) {
   async function sendEdits(edits) {
     let data;
     try {
-      let response = await fetch("/edit", {
+      let response = await fetch("http://localhost:8080/edit", {
         method: "POST",
         headers: {
           Authorization: tokenObj.id_token,

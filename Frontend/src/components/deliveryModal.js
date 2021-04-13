@@ -9,7 +9,7 @@ function DeliveryModal(props) {
 
   const handleEditDelivery = () => {
     let twoWay = props.deliveryModal.data.twoWay ? "Meno-paluu" : "Meno";
-    props.handleDeliveryModal(null, false);
+    props.handleDeliveryModal(false, null);
     props.setAdminModalData({
       material: props.deliveryModal.data.material,
       day: props.deliveryModal.data.day,
@@ -25,7 +25,7 @@ function DeliveryModal(props) {
 
   const handleRemoveDelivery = () => {
     let twoWay = props.deliveryModal.data.twoWay ? "Meno-paluu" : "Meno";
-    props.handleDeliveryModal(null, false);
+    props.handleDeliveryModal(false, null);
     props.setAdminModalData({
       material: props.deliveryModal.data.material,
       day: props.deliveryModal.data.day,
@@ -41,7 +41,7 @@ function DeliveryModal(props) {
 
   return (
     props.deliveryModal.data !== null ? (
-      <Modal show={props.deliveryModal.open} onHide={() => props.handleDeliveryModal(null, false)} centered>
+      <Modal show={props.deliveryModal.open} onHide={() => props.handleDeliveryModal(false, null)} centered>
         <Modal.Header closeButton>
           <Modal.Title>
             Toimituksen tiedot
@@ -60,12 +60,12 @@ function DeliveryModal(props) {
           <div className="delivery-modal-container">
             <div className="delivery-modal-info">
               <div className="delivery-modal-name">Materiaali:</div>
-              {props.deliveryModal.data.material}
+              <div>{props.deliveryModal.data.material}</div>
             </div>
 
             <div className="delivery-modal-info">
               <div className="delivery-modal-name">Kuljettaja:</div>
-              {props.deliveryModal.data.driver}
+              <div>{props.deliveryModal.data.driver}</div>
             </div>
             <div className="delivery-modal-info">
               <div className="delivery-modal-name">Lisätieto:</div>

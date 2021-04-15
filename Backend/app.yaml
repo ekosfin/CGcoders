@@ -1,5 +1,11 @@
 runtime: nodejs14
 
+handlers:
+  - url: /.*
+    script: auto
+    secure: always
+    redirect_http_response_code: 301
+
 env_variables:
   URL: "REPLACE_URL"
   API_KEY: "REPLACE_API_KEY"

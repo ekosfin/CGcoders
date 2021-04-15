@@ -64,14 +64,14 @@ export default function Schedule() {
     setLoadingData(false);
   }
 
-  //Fetches data on first load and sets an INTERVAL_TIME minute timer to reload data
+  //Fetches data on first load and sets an X minute timer to reload data
   useEffect(() => {
     fetchData();
 
     const timer = setInterval(() => {
       console.log("Loading new data");
       fetchData();
-    }, 10 * 60 * 1000);
+    }, 5 * 60 * 1000);
 
     //Handle logout, clearing data
     return () => {
@@ -101,7 +101,7 @@ export default function Schedule() {
   return (
     <div>
       {loading ?
-        <div className="loading">
+        <div data-testid="loading" className="loading">
           <Spinner animation="border" />
         </div>
         :

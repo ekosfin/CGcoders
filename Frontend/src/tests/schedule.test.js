@@ -1,22 +1,10 @@
 import { useEffect } from "react";
 
-import { render, fireEvent, screen, act } from "@testing-library/react";
+import { render, fireEvent, screen, act, waitFor } from "@testing-library/react";
 import Schedule from "../components/schedule";
 import { DataProvider, useData } from "../components/contexts/DataContext";
 import { AdminDataProvider } from "../components/contexts/AdminDataContext";
-import DeliveryModal from "../components/deliveryModal";
 
-const schedule = require("../components/schedule");
-
-const SetMockData = () => {
-    const { setData } = useData();
-
-    useEffect(() => {
-        setData(data);
-    }, []);
-
-    return null;
-}
 //jest.mock("../components/schedule", () => ({ getData: jest.fn() }));
 
 /*DataContext data*/
@@ -103,42 +91,56 @@ let data = {
 }
 
 
-/*describe("unit tests for schedule grid", () => {
+describe("unit tests for schedule grid", () => {
 
+    
 
-    act(() => {
+    beforeAll(async () => {
+        fetchMock.mockResponse(JSON.stringify(data));
         render(
             <DataProvider>
                 <AdminDataProvider>
-                    <SetMockData />
                     <Schedule />
                 </AdminDataProvider>
             </DataProvider>
         );
-    });
+
+        await waitFor(fetchMock).toHaveBeenCalledTimes(1);
+    })
+    beforeEach(() => {
+        fetchMock.resetMocks();
+    })
+
+    
+
 
     test("weekdays render correctly", () => {
-        screen.getByText("TÄMÄ ON JOKU RANDOM VIESTI");
+        /*fetchMock.mockResponse(JSON.stringify(data));
+        screen.getByText("Maanantai");
         screen.getByText("Tiistai");
         screen.getByText("Keskiviikko");
         screen.getByText("Torstai");
         screen.getByText("Perjantai");
         screen.getByText("Lauantai");
-        screen.getByText("Sunnuntai");
+        screen.getByText("Sunnuntai");*/
     });
 
-    test("materials render correctly", () => {
+    /*test("materials render correctly", () => {
+        
         act(() => {
+            fetchMock.mockResponse(JSON.stringify(data));
             screen.getByText("Materiaali1");
             screen.getByText("Materiaali2");
         });
     });
 
     test("deliveries render correctly", () => {
+        
         act(() => {
-            screen.getAllByText("Ku K12");
+            fetchMock.mockResponse(JSON.stringify(data));
+            screen.getByText("Ku K12");
             screen.getByText("Ku K9");
             screen.getByText("Ku K8");
         });
-    });
-});*/
+    });*/
+});

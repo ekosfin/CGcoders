@@ -10,10 +10,14 @@ const mockFetch = async () => {
 describe("data context works as intended", () => {
   const wrapper = ({ children }) => <DataProvider>{children}</DataProvider>
 
-  beforeAll(() => jest.spyOn(window, "fetch"));
-  beforeEach(() => window.fetch.mockImplementation(mockFetch));
+  beforeEach(() => {
+    fetchMock.resetMocks();
+  })
 
-  /*test("adding new data works", () => {
+  //beforeAll(() => jest.spyOn(window, "fetch"));
+  //beforeEach(() => window.fetch.mockImplementation(mockFetch));
+
+  test("adding new data works", () => {
     const { result } = renderHook(() => useData(), { wrapper });
     expect(result.current.data).toEqual({});
     act(() => {
@@ -42,10 +46,11 @@ describe("data context works as intended", () => {
 
     expect(result.current.data).toEqual({});
     expect(result.current.userRights).toBeNull();
-  });*/
+  });
 
-  test("modifying data works", async () => {
+  test("getting & modifying data works", async () => {
     const { result } = renderHook(() => useData(), { wrapper });
+
     let data = {
       "permissions": "edit",
       "schedule": [
@@ -118,17 +123,81 @@ describe("data context works as intended", () => {
         "Kaupunki2"
       ]
     }
+
     let dataResult;
-    
+
+    expect(result.current.userRights).toBeNull();
+
     await act(async () => {
+      fetchMock.mockResponse(JSON.stringify(data));
+      await result.current.setTokenObj({ id_token: "test" });
       dataResult = await result.current.getData();
       console.log(dataResult);
     });
 
-    expect(window.fetch).toHaveBeenCalledTimes(1);
+    //expect(fetch.mock.calls.length).toEqual(1);
+    expect(dataResult).toBeTruthy();
+    expect(result.current.data.schedule[0].data[0][0].day).toBe("Maanantai");
+    expect(result.current.data.schedule[0].data[0][0].material).toBe("Materiaali1");
+    expect(result.current.data.schedule[0].data[0][0].idNum).toBe(0);
+    expect(result.current.userRights).toBe("admin");
+  });
 
-    expect(data.schedule[0].data[0][0].day).toBe("Maanantai");
-    expect(data.schedule[0].data[0][0].material).toBe("Materiaali1");
-    expect(data.schedule[0].data[0][0].idNum).toBe(0);
+  test("getData with email not in system", async () => {
+    const { result } = renderHook(() => useData(), { wrapper });
+
+    let data = {
+      message: "Email not in system"
+    }
+
+    let dataResult;
+
+    await act(async () => {
+      fetchMock.mockResponse(JSON.stringify(data));
+      await result.current.setTokenObj({ id_token: "test" });
+      dataResult = await result.current.getData();
+      console.log(dataResult);
+    })
+
+    expect(dataResult).toBeFalsy();
+    expect(result.current.userRights).toBeNull();
+
+  });
+
+  test("getData with error in sheets", async () => {
+    const { result } = renderHook(() => useData(), { wrapper });
+
+    let data = {
+      message: "Error in sheets"
+    }
+
+    let dataResult;
+
+    await act(async () => {
+      fetchMock.mockResponse(JSON.stringify(data));
+      await result.current.setTokenObj({ id_token: "test" });
+      dataResult = await result.current.getData();
+      console.log(dataResult);
+    })
+
+    expect(dataResult).toBeFalsy();
+    expect(result.current.userRights).toBeNull();
+
+  });
+
+  test("setting data loading", () => {
+    const { result } = renderHook(() => useData(), { wrapper });
+
+    expect(result.current.loadingData).toBeFalsy();
+    act(() => {
+      result.current.setLoadingData(true);
+    });
+
+    expect(result.current.loadingData).toBeTruthy();
+    act(() => {
+      result.current.setLoadingData(false);
+    });
+
+    expect(result.current.loadingData).toBeFalsy();
   });
 });

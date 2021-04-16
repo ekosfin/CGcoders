@@ -12,14 +12,16 @@ export function DataProvider({ children }) {
   const [userRights, setUserRights] = useState(null);
   const [idNum, setIdNum] = useState(0);
   const [tokenObj, setTokenObj] = useState(null);
-  const [loadingData, setLoadingData] = useState(false);
-  //const [gettingData, setGettingData] = useState(false);
-  //const [sendingData, setSendingData] = useState(false);
+  const [dataContextLoading, setDataContextLoading] = useState(false);
   const { REACT_APP_CLIENT_ID } = process.env;
 
   function clearData() {
     setData({});
     setUserRights(null);
+  }
+
+  const sleep = (time) => {
+    return new Promise(a => setTimeout(a, time));
   }
 
   const modifyData = (data) => {
@@ -120,6 +122,11 @@ export function DataProvider({ children }) {
   }
 
   async function sendEdits(edits) {
+    while (dataContextLoading) {
+      console.log("Already loading data, waiting for 1 second");
+      await sleep(1000);
+    }
+
     let data;
     try {
       let response = await fetch("/edit", {
@@ -154,8 +161,8 @@ export function DataProvider({ children }) {
     sendEdits,
     tokenObj,
     setTokenObj,
-    loadingData,
-    setLoadingData,
+    dataContextLoading,
+    setDataContextLoading,
     REACT_APP_CLIENT_ID,
   };
 

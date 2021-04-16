@@ -6,7 +6,7 @@ import AdminModal from "./adminModal";
 import twoWay from "../twoWay.svg";
 
 export default function Schedule() {
-  const { data, getData, clearData, userRights, setLoadingData } = useData();
+  const { data, getData, clearData, userRights, setDataContextLoading } = useData();
 
   const [deliveryModal, setDeliveryModal] = useState({
     open: false,
@@ -46,7 +46,7 @@ export default function Schedule() {
   }
 
   const fetchData = async () => {
-    setLoadingData(true);
+    setDataContextLoading(true);
     let result = await getData();
     if (isCancelled) {
       return;
@@ -61,7 +61,7 @@ export default function Schedule() {
     if (loading) {
       setLoading(false);
     }
-    setLoadingData(false);
+    setDataContextLoading(false);
   }
 
   //Fetches data on first load and sets an X minute timer to reload data
@@ -71,7 +71,7 @@ export default function Schedule() {
     const timer = setInterval(() => {
       console.log("Loading new data");
       fetchData();
-    }, 5 * 60 * 1000);
+    }, 1 * 60 * 1000);
 
     //Handle logout, clearing data
     return () => {

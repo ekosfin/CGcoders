@@ -62,6 +62,7 @@ export default function Schedule() {
   };
 
   const fetchData = async () => {
+    //Checks for active fetch requests and aborts if it detects any
     if (dataContextLoading) {
       return;
     }

@@ -20,10 +20,6 @@ export function DataProvider({ children }) {
     setUserRights(null);
   }
 
-  const sleep = (time) => {
-    return new Promise(a => setTimeout(a, time));
-  }
-
   const modifyData = (data) => {
     let dayList = [
       "Maanantai",
@@ -50,8 +46,7 @@ export function DataProvider({ children }) {
               deliveryItem.driver = dayItemList[0];
               deliveryItem.destination = dayItemList[1];
               deliveryItem.time = dayItemList[2];
-            }
-            else {
+            } else {
               deliveryItem.driver = "-";
               deliveryItem.destination = "-";
               deliveryItem.time = "-";
@@ -122,11 +117,6 @@ export function DataProvider({ children }) {
   }
 
   async function sendEdits(edits) {
-    while (dataContextLoading) {
-      console.log("Already loading data, waiting for 1 second");
-      await sleep(1000);
-    }
-
     let data;
     try {
       let response = await fetch("/edit", {

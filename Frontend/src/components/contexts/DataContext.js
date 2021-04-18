@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const DataContext = React.createContext();
 
@@ -7,15 +8,16 @@ export function useData() {
 }
 
 export function DataProvider({ children }) {
-  //this is temp data
-  const [data, setData] = useState([]);
-  const [userRights, setUserRights] = useState("admin");
-  const [idNum, setIdNum] = useState();
+  const [data, setData] = useState({});
+  const [userRights, setUserRights] = useState(null);
+  const [idNum, setIdNum] = useState(0);
   const [tokenObj, setTokenObj] = useState(null);
+  const [dataContextLoading, setDataContextLoading] = useState(false);
   const { REACT_APP_CLIENT_ID } = process.env;
+  const history = useHistory();
 
   function clearData() {
-    setData([]);
+    setData({});
     setUserRights(null);
   }
 
@@ -31,17 +33,31 @@ export function DataProvider({ children }) {
     ];
     if (data.schedule !== undefined && data.schedule.length > 0) {
       let idNum = 0;
-      data.schedule.forEach((material) => {
+      data.schedule = data.schedule.map((material) => {
         let dayNum = 0;
-        material.data.forEach((dayItem) => {
-          dayItem.forEach((deliveryItem) => {
+        material.data = material.data.map((dayItem) => {
+          dayItem = dayItem.map((deliveryItem) => {
             deliveryItem.day = dayList[dayNum];
             deliveryItem.material = material.materialName;
             deliveryItem.idNum = idNum;
             idNum++;
+
+            let dayItemList = deliveryItem.dayItem?.split(" ");
+            if (dayItemList?.length > 2) {
+              deliveryItem.driver = dayItemList[0];
+              deliveryItem.destination = dayItemList[1];
+              deliveryItem.time = dayItemList[2];
+            } else {
+              deliveryItem.driver = "-";
+              deliveryItem.destination = "-";
+              deliveryItem.time = "-";
+            }
+            return deliveryItem;
           });
           dayNum++;
+          return dayItem;
         });
+        return material;
       });
       setIdNum(idNum);
     }
@@ -58,15 +74,11 @@ export function DataProvider({ children }) {
   };
 
   function handleEmailReject() {
-    //TODO this function is called when email is not on list
+    history.push("/");
   }
 
   function handleEmailError() {
-    //TODO this function is called when emails permissions is not regoniced by the sheets API
-  }
-
-  function handleAPIError() {
-    //TODO this function is a catch all for error coming from API or gateway
+    history.push("/");
   }
 
   async function getData() {
@@ -96,6 +108,11 @@ export function DataProvider({ children }) {
       }
       getPermissions(data);
       data = modifyData(data);
+      if (data.message === "Authorization failed") {
+        setTokenObj(null);
+        history.push("/");
+        return false;
+      }
       setData(data);
       return true;
     }
@@ -136,6 +153,8 @@ export function DataProvider({ children }) {
     sendEdits,
     tokenObj,
     setTokenObj,
+    dataContextLoading,
+    setDataContextLoading,
     REACT_APP_CLIENT_ID,
   };
 

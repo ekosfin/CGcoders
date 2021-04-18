@@ -11,26 +11,23 @@ export function AdminDataProvider({ children }) {
   const { userRights } = useData();
   const [adminModal, setAdminModal] = useState({
     open: false,
-    mode: null
+    mode: null,
   });
-
 
   const handleAdminModal = (openState, mode) => {
     if (userRights !== "admin") {
-      console.log("No admin rights!");
       return;
     }
     setAdminModal({
       open: openState,
-      mode: mode
+      mode: mode,
     });
-  }
+  };
 
   const value = {
     adminModal,
     handleAdminModal,
   };
 
-  return <DataContext.Provider value={value}>{children}</DataContext.Provider>
+  return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 }
-

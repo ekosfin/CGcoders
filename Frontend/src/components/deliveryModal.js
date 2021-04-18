@@ -53,7 +53,7 @@ function DeliveryModal(props) {
               {props.deliveryModal.data.destination}
             </div>
             <div className="delivery-modal-date-row">
-              {props.deliveryModal.data.day} {props.deliveryModal.data.time !== "" && <div>, kello {props.deliveryModal.data.time}</div>}
+              {props.deliveryModal.data.day} {props.deliveryModal.data.time !== "" && <div>, {props.deliveryModal.data.time}</div>}
             </div>
           </div>
           <hr style={{ margin: 0 }} />

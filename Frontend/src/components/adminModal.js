@@ -462,7 +462,7 @@ function AdminModal(props) {
           <Form onSubmit={handleSubmit}>
             <p>
               {props.adminModalData.destination} | {props.adminModalData.day},
-              kello {props.adminModalData.time}
+              {props.adminModalData.time}
             </p>
             <Button
               style={{ marginRight: 10 }}

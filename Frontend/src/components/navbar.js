@@ -24,7 +24,7 @@ export default function NavBar() {
       variant="dark"
     >
       <Navbar.Brand className="navbar-logo-container">
-        <img alt="remeo-logo" src={Logo} />
+        <img alt="remeo-logo" src={Logo}/>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">

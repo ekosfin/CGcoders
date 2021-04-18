@@ -92,7 +92,7 @@ export default function Schedule() {
     const timer = setInterval(() => {
       console.log("Loading new data");
       fetchData();
-    }, 10 * 60 * 1000);
+    }, 5 * 60 * 1000);
 
     //Handle logout, clearing data
     return () => {

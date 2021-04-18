@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const DataContext = React.createContext();
 
@@ -14,7 +15,8 @@ export function DataProvider({ children }) {
   const [tokenObj, setTokenObj] = useState(null);
   const [dataContextLoading, setDataContextLoading] = useState(false);
   const { REACT_APP_CLIENT_ID } = process.env;
-
+  const history = useHistory();
+  
   function clearData() {
     setData({});
     setUserRights(null);
@@ -111,6 +113,12 @@ export function DataProvider({ children }) {
       }
       getPermissions(data);
       data = modifyData(data);
+      if (data.message === "Authorization failed") {
+        console.log("Authorization failed, logging out!")
+        setTokenObj(null);
+        history.push("/");
+        return false;
+      }
       setData(data);
       return true;
     }

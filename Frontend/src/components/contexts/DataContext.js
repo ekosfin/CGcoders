@@ -8,7 +8,6 @@ export function useData() {
 }
 
 export function DataProvider({ children }) {
-  //this is temp data
   const [data, setData] = useState({});
   const [userRights, setUserRights] = useState(null);
   const [idNum, setIdNum] = useState(0);
@@ -16,7 +15,7 @@ export function DataProvider({ children }) {
   const [dataContextLoading, setDataContextLoading] = useState(false);
   const { REACT_APP_CLIENT_ID } = process.env;
   const history = useHistory();
-  
+
   function clearData() {
     setData({});
     setUserRights(null);
@@ -75,15 +74,11 @@ export function DataProvider({ children }) {
   };
 
   function handleEmailReject() {
-    //TODO this function is called when email is not on list
+    history.push("/");
   }
 
   function handleEmailError() {
-    //TODO this function is called when emails permissions is not regoniced by the sheets API
-  }
-
-  function handleAPIError() {
-    //TODO this function is a catch all for error coming from API or gateway
+    history.push("/");
   }
 
   async function getData() {
@@ -114,7 +109,6 @@ export function DataProvider({ children }) {
       getPermissions(data);
       data = modifyData(data);
       if (data.message === "Authorization failed") {
-        console.log("Authorization failed, logging out!")
         setTokenObj(null);
         history.push("/");
         return false;

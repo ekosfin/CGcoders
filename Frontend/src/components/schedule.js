@@ -73,7 +73,6 @@ export default function Schedule() {
     }
     if (result) {
       setError("");
-      console.log("Loaded data successfully");
     } else {
       setError(
         "Tietojen hakeminen epäonnistui. Yritetään uudelleen hetken kuluttua."
@@ -90,7 +89,6 @@ export default function Schedule() {
     fetchData();
 
     const timer = setInterval(() => {
-      console.log("Loading new data");
       fetchData();
     }, 5 * 60 * 1000);
 
@@ -99,7 +97,6 @@ export default function Schedule() {
       clearInterval(timer);
       setIsCancelled(true);
       clearData();
-      console.log("Clearing interval");
     };
   }, []);
 

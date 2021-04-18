@@ -3,10 +3,6 @@ import { Col, Form, Modal, Row, Button, Spinner, Alert } from "react-bootstrap";
 import { useAdminData } from "./contexts/AdminDataContext";
 import { useData } from "./contexts/DataContext";
 
-const sleep = (time) => {
-  return new Promise((a) => setTimeout(a, time));
-};
-
 function AdminModal(props) {
   const { adminModal, handleAdminModal } = useAdminData();
   const {
@@ -24,7 +20,6 @@ function AdminModal(props) {
     day: "",
   });
   const [loading, setLoading] = useState(false);
-  //const [awaitingChange, setAwaitingChange] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -49,18 +44,6 @@ function AdminModal(props) {
     }
   }, [adminModal.open]);
 
-  /*useEffect(() => {
-    if (awaitingChange) {
-      console.log("Waited! Changing data.");
-
-
-      //setData(result.dataList);
-      //setLoading(false);
-      handleAdminModal(false, null);
-      setAwaitingChange(false);
-    }
-  }, [data]);*/
-
   const handleChange = (e) => {
     props.setAdminModalData({
       ...props.adminModalData,
@@ -80,15 +63,9 @@ function AdminModal(props) {
     setDataContextLoading(true);
     let result = await sendEdits(edits);
     if (result) {
-      if (loadingData) {
-        console.log("Already loading data, waiting...");
-        //setAwaitingChange(true);
-        return;
-      } else {
-        console.log("Success!");
-        setData(localData);
-        handleAdminModal(false, null);
-      }
+      console.log("Success!");
+      setData(localData);
+      handleAdminModal(false, null);
     } else {
       /*TODO Error handling with bad internet connection / other error*/
       console.log("Failure!");
@@ -124,7 +101,6 @@ function AdminModal(props) {
       result = removeDelivery(dataList);
       edits = addToEdits(edits, result.edits);
     }
-    //console.log(dataList);
     if (dataContextLoading) {
       setError("Tietoja noudetaan odota hetki ja yritä uudelleen");
     } else {
@@ -461,7 +437,8 @@ function AdminModal(props) {
         ) : adminModal.mode === "remove" ? (
           <Form onSubmit={handleSubmit}>
             <p>
-              {props.adminModalData.destination} | {props.adminModalData.day}, {props.adminModalData.time}
+              {props.adminModalData.destination} | {props.adminModalData.day},{" "}
+              {props.adminModalData.time}
             </p>
             <Button
               style={{ marginRight: 10 }}

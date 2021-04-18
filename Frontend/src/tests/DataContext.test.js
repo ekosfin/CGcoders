@@ -188,16 +188,16 @@ describe("data context works as intended", () => {
   test("setting data loading", () => {
     const { result } = renderHook(() => useData(), { wrapper });
 
-    expect(result.current.loadingData).toBeFalsy();
+    expect(result.current.dataContextLoading).toBeFalsy();
     act(() => {
-      result.current.setLoadingData(true);
+      result.current.setDataContextLoading(true);
     });
 
-    expect(result.current.loadingData).toBeTruthy();
+    expect(result.current.dataContextLoading).toBeTruthy();
     act(() => {
-      result.current.setLoadingData(false);
+      result.current.setDataContextLoading(false);
     });
 
-    expect(result.current.loadingData).toBeFalsy();
+    expect(result.current.dataContextLoading).toBeFalsy();
   });
 });

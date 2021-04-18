@@ -42,7 +42,7 @@ describe("delivery modal shows the right information", () => {
   test("delivery modal works with correct information", () => {
     screen.getByText("Kaupunki2");
     screen.getByText("Maanantai");
-    screen.getByText(", kello 12");
+    screen.getByText(", 12");
 
     screen.getByText("Materiaali:")
     screen.getByText("Materiaali1")

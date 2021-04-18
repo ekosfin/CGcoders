@@ -461,8 +461,7 @@ function AdminModal(props) {
         ) : adminModal.mode === "remove" ? (
           <Form onSubmit={handleSubmit}>
             <p>
-              {props.adminModalData.destination} | {props.adminModalData.day},
-              {props.adminModalData.time}
+              {props.adminModalData.destination} | {props.adminModalData.day}, {props.adminModalData.time}
             </p>
             <Button
               style={{ marginRight: 10 }}

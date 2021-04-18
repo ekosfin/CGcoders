@@ -101,7 +101,6 @@ export default function Schedule() {
   }, []);
 
   useEffect(() => {
-    console.log(data);
     if (
       data.schedule !== undefined &&
       data.schedule.length > 0 &&

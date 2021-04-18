@@ -11,7 +11,6 @@ function AdminModal(props) {
     idNum,
     setIdNum,
     sendEdits,
-    loadingData,
     dataContextLoading,
     setDataContextLoading,
   } = useData();
@@ -30,7 +29,6 @@ function AdminModal(props) {
       });
     }
     if (!adminModal.open) {
-      console.log("Clearing admin modal state");
       props.setAdminModalData({
         material: "",
         day: "",
@@ -67,8 +65,6 @@ function AdminModal(props) {
       setData(localData);
       handleAdminModal(false, null);
     } else {
-      /*TODO Error handling with bad internet connection / other error*/
-      console.log("Failure!");
       if (adminModal.mode === "new") {
         setError("Tietojen tallentaminen epäonnistui! Yritä uudelleen.");
       } else if (adminModal.mode === "edit") {
@@ -411,26 +407,14 @@ function AdminModal(props) {
                 <Button
                   className="w-100"
                   type="submit"
-                  disabled={loading || loadingData}
-                >
-                  {loadingData ? (
-                    <div>Ladataan, odota hetki</div>
-                  ) : (
-                    <div>Lisää toimitus</div>
-                  )}
-                </Button>
+                  disabled={loading}
+                >Lisää toimitus</Button>
               ) : (
                 <Button
                   className="w-100"
                   type="submit"
-                  disabled={loading || loadingData}
-                >
-                  {loadingData ? (
-                    <div>Ladataan, odota hetki</div>
-                  ) : (
-                    <div>Tallenna muutokset</div>
-                  )}
-                </Button>
+                  disabled={loading}
+                >Tallenna muutokset</Button>
               )}
             </Form>
           </div>
@@ -443,14 +427,8 @@ function AdminModal(props) {
             <Button
               style={{ marginRight: 10 }}
               type="submit"
-              disabled={loading || loadingData}
-            >
-              {loadingData ? (
-                <div>Ladataan, odota hetki</div>
-              ) : (
-                <div>Kyllä</div>
-              )}
-            </Button>
+              disabled={loading}
+            >Kyllä</Button>
             <Button
               onClick={() => handleAdminModal(false, null)}
               disabled={loading}

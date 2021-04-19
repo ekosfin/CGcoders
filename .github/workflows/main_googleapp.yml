@@ -30,13 +30,6 @@ jobs:
       - name: Copy frontend to backend
         run: cp -r ./Frontend/build ./Backend/build
 
-      - name: Upload static build
-        uses: google-github-actions/upload-cloud-storage@main
-        with:
-          credentials: ${{ secrets.GCP_Creds }}
-          path: ./Frontend/build
-          destination: gccoder.appspot.com
-
       - name: Find and replace URL secrets
         uses: jacobtomlinson/gha-find-replace@master
         with:

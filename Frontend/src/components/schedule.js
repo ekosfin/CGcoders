@@ -263,7 +263,7 @@ export default function Schedule() {
                               <div className="grid-text-bold">
                                 {dayData.driver?.substring(0, 2) +
                                   " " +
-                                  dayData.destination?.substring(0, 1) +
+                                  dayData.destination?.substring(0, 2) +
                                   dayData.time}
                                 {dayData.twoWay && (
                                   <img
@@ -280,7 +280,7 @@ export default function Schedule() {
                               <div className="grid-text-normal">
                                 {dayData.driver?.substring(0, 2) +
                                   " " +
-                                  dayData.destination?.substring(0, 1) +
+                                  dayData.destination?.substring(0, 2) +
                                   dayData.time}
                                 {dayData.twoWay && (
                                   <img

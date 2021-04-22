@@ -17,7 +17,7 @@ function DeliveryModal(props) {
       destination: props.deliveryModal.data.destination,
       time: props.deliveryModal.data.time,
       direction: twoWay,
-      info: props.deliveryModal.data.dayInfo,
+      info: props.deliveryModal.data.info,
       idNum: props.deliveryModal.data.idNum
     });
     handleAdminModal(true, "edit");
@@ -33,7 +33,7 @@ function DeliveryModal(props) {
       destination: props.deliveryModal.data.destination,
       time: props.deliveryModal.data.time,
       direction: twoWay,
-      info: props.deliveryModal.data.dayInfo,
+      info: props.deliveryModal.data.info,
       idNum: props.deliveryModal.data.idNum
     });
     handleAdminModal(true, "remove");
@@ -69,7 +69,7 @@ function DeliveryModal(props) {
             </div>
             <div className="delivery-modal-info">
               <div className="delivery-modal-name">Lisätieto:</div>
-              {props.deliveryModal.data.dayInfo.length > 0 ? <div>{props.deliveryModal.data.dayInfo}</div> : <div>-</div>}
+              {props.deliveryModal.data.info.length > 0 ? <div>{props.deliveryModal.data.info}</div> : <div>-</div>}
             </div>
             <div className="delivery-modal-info">
               <div className="delivery-modal-name">Suunta:</div>

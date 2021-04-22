@@ -61,7 +61,6 @@ function AdminModal(props) {
     setDataContextLoading(true);
     let result = await sendEdits(edits);
     if (result) {
-      console.log("Success!");
       setData(localData);
       handleAdminModal(false, null);
     } else {
@@ -126,13 +125,7 @@ function AdminModal(props) {
     let deliveryData = {
       color: driverColor,
       day: props.adminModalData.day,
-      dayInfo: props.adminModalData.info,
-      dayItem:
-        props.adminModalData.driver +
-        " " +
-        props.adminModalData.destination +
-        " " +
-        props.adminModalData.time,
+      info: props.adminModalData.info,
       driver: props.adminModalData.driver,
       destination: props.adminModalData.destination,
       time: props.adminModalData.time,

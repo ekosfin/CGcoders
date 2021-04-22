@@ -42,7 +42,7 @@ export function DataProvider({ children }) {
             deliveryItem.idNum = idNum;
             idNum++;
 
-            let dayItemList = deliveryItem.dayItem?.split(" ");
+            /*let dayItemList = deliveryItem.dayItem?.split(" ");
             if (dayItemList?.length > 2) {
               deliveryItem.driver = dayItemList[0];
               deliveryItem.destination = dayItemList[1];
@@ -51,7 +51,7 @@ export function DataProvider({ children }) {
               deliveryItem.driver = "-";
               deliveryItem.destination = "-";
               deliveryItem.time = "-";
-            }
+            }*/
             return deliveryItem;
           });
           dayNum++;

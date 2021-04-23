@@ -41,17 +41,6 @@ export function DataProvider({ children }) {
             deliveryItem.material = material.materialName;
             deliveryItem.idNum = idNum;
             idNum++;
-
-            /*let dayItemList = deliveryItem.dayItem?.split(" ");
-            if (dayItemList?.length > 2) {
-              deliveryItem.driver = dayItemList[0];
-              deliveryItem.destination = dayItemList[1];
-              deliveryItem.time = dayItemList[2];
-            } else {
-              deliveryItem.driver = "-";
-              deliveryItem.destination = "-";
-              deliveryItem.time = "-";
-            }*/
             return deliveryItem;
           });
           dayNum++;

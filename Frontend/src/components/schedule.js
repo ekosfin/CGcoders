@@ -258,7 +258,7 @@ export default function Schedule() {
                           }}
                           key={index3}
                         >
-                          {dayData.dayInfo.length > 0 ? (
+                          {dayData.info?.length > 0 ? (
                             <div>
                               <div className="grid-text-bold">
                                 {dayData.driver?.substring(0, 2) +
@@ -273,7 +273,7 @@ export default function Schedule() {
                                   />
                                 )}
                               </div>
-                              <div className="grid-info">{dayData.dayInfo}</div>
+                              <div className="grid-info">{dayData.info}</div>
                             </div>
                           ) : (
                             <div>

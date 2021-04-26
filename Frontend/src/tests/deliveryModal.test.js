@@ -5,8 +5,7 @@ import { DataProvider } from "../components/contexts/DataContext";
 import { AdminDataProvider } from "../components/contexts/AdminDataContext";
 
 let dayData = {
-  "dayItem": "Kuljettaja1 Kaupunki2 12",
-  "dayInfo": "",
+  "info": "",
   "twoWay": true,
   "color": "#FFFFFF",
   "day": "Maanantai",

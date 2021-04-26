@@ -12,10 +12,7 @@ describe("data context works as intended", () => {
 
   beforeEach(() => {
     fetchMock.resetMocks();
-  })
-
-  //beforeAll(() => jest.spyOn(window, "fetch"));
-  //beforeEach(() => window.fetch.mockImplementation(mockFetch));
+  });
 
   test("adding new data works", () => {
     const { result } = renderHook(() => useData(), { wrapper });
@@ -59,8 +56,7 @@ describe("data context works as intended", () => {
           "data": [
             [
               {
-                "dayItem": "Kuljettaja1 Kaupunki2 12",
-                "dayInfo": "",
+                "info": "",
                 "twoWay": true,
                 "color": "#FFFFFF",
                 "driver": "Kuljettaja1",
@@ -68,8 +64,7 @@ describe("data context works as intended", () => {
                 "time": "12"
               },
               {
-                "dayItem": "Kuljettaja2 Kaupunki2 9",
-                "dayInfo": "",
+                "info": "",
                 "twoWay": true,
                 "color": "#FFFFFF",
                 "driver": "Kuljettaja1",
@@ -91,8 +86,7 @@ describe("data context works as intended", () => {
             [],
             [
               {
-                "dayItem": "Kuljettaja2 Kaupunki1 8",
-                "dayInfo": "",
+                "info": "",
                 "twoWay": false,
                 "color": "#FFFFFF",
                 "driver": "Kuljettaja2",
@@ -141,48 +135,6 @@ describe("data context works as intended", () => {
     expect(result.current.data.schedule[0].data[0][0].material).toBe("Materiaali1");
     expect(result.current.data.schedule[0].data[0][0].idNum).toBe(0);
     expect(result.current.userRights).toBe("admin");
-  });
-
-  test("getData with email not in system", async () => {
-    const { result } = renderHook(() => useData(), { wrapper });
-
-    let data = {
-      message: "Email not in system"
-    }
-
-    let dataResult;
-
-    await act(async () => {
-      fetchMock.mockResponse(JSON.stringify(data));
-      await result.current.setTokenObj({ id_token: "test" });
-      dataResult = await result.current.getData();
-      console.log(dataResult);
-    })
-
-    expect(dataResult).toBeFalsy();
-    expect(result.current.userRights).toBeNull();
-
-  });
-
-  test("getData with error in sheets", async () => {
-    const { result } = renderHook(() => useData(), { wrapper });
-
-    let data = {
-      message: "Error in sheets"
-    }
-
-    let dataResult;
-
-    await act(async () => {
-      fetchMock.mockResponse(JSON.stringify(data));
-      await result.current.setTokenObj({ id_token: "test" });
-      dataResult = await result.current.getData();
-      console.log(dataResult);
-    })
-
-    expect(dataResult).toBeFalsy();
-    expect(result.current.userRights).toBeNull();
-
   });
 
   test("setting data loading", () => {
